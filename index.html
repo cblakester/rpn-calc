@@ -46,17 +46,17 @@
   .stack-row {
     display: flex;
     justify-content: space-between;
-    font-size: 14px;
+    font-size: 16px;
     opacity: 0.75;
     padding: 2px 0;
   }
   .stack-row .lbl { opacity: 0.55; min-width: 28px; }
-  .stack-row.level1 { opacity: 1; font-size: 16px; font-weight: 600; }
+  .stack-row.level1 { opacity: 1; font-size: 19px; font-weight: 600; }
   .input-line {
     margin-top: 10px;
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 700;
-    min-height: 30px;
+    min-height: 34px;
     color: #fff;
     letter-spacing: 0.5px;
   }
@@ -210,7 +210,7 @@
     <div class="keypad">
       <button class="key danger" onclick="clearAll()">AC</button>
       <button class="key stub" disabled>—</button>
-      <button class="key stub" disabled>—</button>
+      <button class="key op" id="commaBtn" onclick="toggleCommas()">1,000</button>
       <button class="key op" style="font-size:11px;" onclick="toggleDisplayMode()">DEC/FRAC</button>
       <button class="key danger" onclick="back()">⌫</button>
 
@@ -253,7 +253,7 @@
 
 </div>
 <script>
-let stack = [], input = "", mode = 'normal', shifted = false, currentCat = null, displayMode = 'fraction';
+let stack = [], input = "", mode = 'normal', shifted = false, currentCat = null, displayMode = 'fraction', commaMode = false;
 
 const CATEGORIES = ['Length','Area','Volume','Temp','Weight','Speed'];
 const CAT_UNITS = {
@@ -288,6 +288,10 @@ const UNITS = {
 const $ = id => document.getElementById(id);
 const gcd = (a,b) => b ? gcd(b, a%b) : a;
 
+function addCommas(s) {
+  // Apply commas to the whole number part only
+  return s.replace(/^(-?\d+)/, n => n.replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+}
 function fmtNum(val) {
   if (!Number.isFinite(val)) return "ERR";
   if (displayMode === 'decimal') return val.toFixed(8).replace(/\.?0+$/,'') || '0';
@@ -304,7 +308,11 @@ function fmtNum(val) {
   if (whole===0) return sign+rem+'/'+dr;
   return sign+whole+' '+rem+'/'+dr;
 }
-function fmtVal({value,unit}) { return fmtNum(value)+(unit?' '+unit:''); }
+function fmtVal({value,unit}) {
+  let s = fmtNum(value);
+  if (commaMode) s = addCommas(s);
+  return s + (unit ? ' ' + unit : '');
+}
 function status(msg, isErr=false) {
   const el=$('statusLine');
   el.textContent=msg;
@@ -435,6 +443,7 @@ function operate(op) {
 }
 
 function toggleDisplayMode(){displayMode=displayMode==='fraction'?'decimal':'fraction';status(`Display: ${displayMode}`);render();}
+function toggleCommas(){commaMode=!commaMode;$('commaBtn').style.boxShadow=commaMode?'0 0 12px #4da3ff88':'';status(`Commas: ${commaMode?'on':'off'}`);render();}
 function toggleShift(){shifted=!shifted;render();}
 function toggleUnitsMode(){
   if(mode==='normal'){mode='categories';setSoftkeys(CATEGORIES);}
@@ -502,6 +511,7 @@ document.addEventListener('keydown', e => {
     case 'r': case 'R': rollDown(); break;
     case 'd': case 'D': drop(); break;
     case 'f': case 'F': toggleDisplayMode(); break;
+    case 'c': case 'C': toggleCommas(); break;
     case 'Shift':    break; // ignore bare shift key
   }
 });
