@@ -19,6 +19,7 @@
     --red:     #e53935;
     --yellow:  #ffb300;
     --softkey: #9575cd;
+    --gap-color: #7a7a8a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -28,9 +29,9 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 16px;
-    padding-top: env(safe-area-inset-top, 16px);
-    padding-bottom: env(safe-area-inset-bottom, 16px);
+    padding: 24px 16px 24px;
+    padding-top: max(24px, env(safe-area-inset-top));
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
   }
   .calc { width: 100%; max-width: 480px; }
 
@@ -49,7 +50,7 @@
     opacity: 0.75;
     padding: 2px 0;
   }
-  .stack-row .lbl { opacity: 0.55; min-width: 24px; }
+  .stack-row .lbl { opacity: 0.55; min-width: 28px; }
   .stack-row.level1 { opacity: 1; font-size: 16px; font-weight: 600; }
   .input-line {
     margin-top: 10px;
@@ -109,6 +110,13 @@
     cursor: pointer;
   }
 
+  /* Keypad with dark background panel for contrast */
+  .keypad-wrap {
+    background: var(--gap-color);
+    border-radius: 14px;
+    padding: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  }
   .keypad { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
   .key {
     padding: 16px 4px;
@@ -138,7 +146,6 @@
     text-align: center; letter-spacing: 0.3px; pointer-events: none;
   }
 
-  /* install banner */
   #installBanner {
     display: none;
     background: linear-gradient(135deg, #4da3ff, #2d7cff);
@@ -154,28 +161,16 @@
   }
   #installBanner.show { display: flex; }
   #installBanner button {
-    background: white;
-    color: #2d7cff;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    white-space: nowrap;
+    background: white; color: #2d7cff; border: none;
+    border-radius: 6px; padding: 6px 14px;
+    font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap;
   }
-  #dismissInstall {
-    background: transparent !important;
-    color: white !important;
-    padding: 4px 8px !important;
-    font-size: 18px !important;
-  }
+  #dismissInstall { background: transparent !important; color: white !important; padding: 4px 8px !important; font-size: 18px !important; }
 </style>
 </head>
 <body>
 <div class="calc">
 
-  <!-- Install banner -->
   <div id="installBanner">
     <span>Add to Home Screen for app experience</span>
     <button onclick="installApp()">Install</button>
@@ -211,55 +206,55 @@
     </select>
   </div>
 
-  <div class="keypad">
-    <button class="key danger" onclick="clearAll()">AC</button>
-    <button class="key stub" disabled>—</button>
-    <button class="key stub" disabled>—</button>
-    <button class="key op"   onclick="toggleDisplayMode()">DEC/FRAC</button>
-    <button class="key danger" onclick="back()">⌫</button>
+  <div class="keypad-wrap">
+    <div class="keypad">
+      <button class="key danger" onclick="clearAll()">AC</button>
+      <button class="key stub" disabled>—</button>
+      <button class="key stub" disabled>—</button>
+      <button class="key op"   onclick="toggleDisplayMode()">DEC/FRAC</button>
+      <button class="key danger" onclick="back()">⌫</button>
 
-    <button class="key enter" onclick="handleEnter()">ENTER</button>
-    <button class="key stack" onclick="swap()">SWAP</button>
-    <button class="key stack" onclick="rollDown()">R↓</button>
-    <button class="key danger" onclick="drop()">DROP</button>
+      <button class="key enter" onclick="handleEnter()">ENTER</button>
+      <button class="key stack" onclick="swap()">SWAP</button>
+      <button class="key stack" onclick="rollDown()">R↓</button>
+      <button class="key danger" onclick="drop()">DROP</button>
 
-    <button class="key op" onclick="toggleUnitsMode()">UNITS</button>
-    <button class="key" onclick="digit('7')">7</button>
-    <button class="key" onclick="digit('8')">8</button>
-    <button class="key" onclick="digit('9')">9</button>
-    <button class="key op" onclick="operate('÷')">÷</button>
+      <button class="key op" onclick="toggleUnitsMode()">UNITS</button>
+      <button class="key" onclick="digit('7')">7</button>
+      <button class="key" onclick="digit('8')">8</button>
+      <button class="key" onclick="digit('9')">9</button>
+      <button class="key op" onclick="operate('÷')">÷</button>
 
-    <button class="key shift" id="shiftBtn" onclick="toggleShift()">
-      <svg width="28" height="18" viewBox="0 0 28 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="22" y1="15" x2="22" y2="6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-        <line x1="22" y1="6" x2="4" y2="6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-        <polyline points="9,1 4,6 9,11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      </svg>
-    </button>
-    <button class="key" onclick="digit('4')">4</button>
-    <button class="key" onclick="digit('5')">5</button>
-    <button class="key" onclick="digit('6')">6</button>
-    <button class="key op" onclick="operate('×')">×</button>
+      <button class="key shift" id="shiftBtn" onclick="toggleShift()">
+        <svg width="28" height="18" viewBox="0 0 28 18" fill="none">
+          <line x1="22" y1="15" x2="22" y2="6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="22" y1="6" x2="4" y2="6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          <polyline points="9,1 4,6 9,11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </button>
+      <button class="key" onclick="digit('4')">4</button>
+      <button class="key" onclick="digit('5')">5</button>
+      <button class="key" onclick="digit('6')">6</button>
+      <button class="key op" onclick="operate('×')">×</button>
 
-    <button class="key stub" disabled>—</button>
-    <button class="key" onclick="digit('1')">1</button>
-    <button class="key" onclick="digit('2')">2</button>
-    <button class="key" onclick="digit('3')">3</button>
-    <button class="key op" onclick="operate('−')">−</button>
+      <button class="key stub" disabled>—</button>
+      <button class="key" onclick="digit('1')">1</button>
+      <button class="key" onclick="digit('2')">2</button>
+      <button class="key" onclick="digit('3')">3</button>
+      <button class="key op" onclick="operate('−')">−</button>
 
-    <button class="key op" onclick="digit('/')">／</button>
-    <button class="key" onclick="digit('0')">0</button>
-    <button class="key" onclick="digit('.')">.</button>
-    <button class="key" onclick="digit(' ')">SPC</button>
-    <button class="key op" onclick="operate('+')">+</button>
+      <button class="key op" onclick="digit('/')">／</button>
+      <button class="key" onclick="digit('0')">0</button>
+      <button class="key" onclick="digit('.')">.</button>
+      <button class="key" onclick="digit(' ')">SPC</button>
+      <button class="key op" onclick="operate('+')">+</button>
+    </div>
   </div>
 
 </div>
 <script>
-// ── State ──────────────────────────────────────────────────────────────────
 let stack = [], input = "", mode = 'normal', shifted = false, currentCat = null, displayMode = 'fraction';
 
-// ── Unit Data ──────────────────────────────────────────────────────────────
 const CATEGORIES = ['Length','Area','Volume','Temp','Weight','Speed'];
 const CAT_UNITS = {
   Length: ['in','ft','mi','mm','cm','m'],
@@ -290,7 +285,6 @@ const UNITS = {
   'knot':  {dim:'speed', f:0.514444}
 };
 
-// ── Helpers ────────────────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
 const gcd = (a,b) => b ? gcd(b, a%b) : a;
 
@@ -318,11 +312,10 @@ function status(msg, isErr=false) {
   el.style.textShadow=isErr?'0 0 8px rgba(255,80,80,0.5)':'';
 }
 
-// ── Render ─────────────────────────────────────────────────────────────────
 function render() {
   const len = stack.length;
   const rows = [];
-  for (let lvl=1; lvl<=4; lvl++) {
+  for (let lvl=1; lvl<=5; lvl++) {
     const idx = len - lvl;
     rows.push({lvl, item: idx>=0 ? stack[idx] : null});
   }
@@ -337,7 +330,6 @@ function render() {
 }
 function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ── Softkeys ───────────────────────────────────────────────────────────────
 function setSoftkeys(labels) {
   ['skA','skB','skC','skD','skE','skF'].forEach((id,i) => {
     const btn=$(id), lbl=labels[i]||null;
@@ -358,9 +350,9 @@ function softkey(idx) {
     const x=stack[stack.length-1];
     if (shifted) {
       const from=UNITS[x.unit], to=UNITS[unit];
-      if (!x.unit)              { status('No unit to convert',true); return; }
-      if (!from||!to)           { status('Unknown unit',true); return; }
-      if (from.dim!==to.dim)    { status('Incompatible dimensions',true); return; }
+      if (!x.unit)           { status('No unit to convert',true); return; }
+      if (!from||!to)        { status('Unknown unit',true); return; }
+      if (from.dim!==to.dim) { status('Incompatible dimensions',true); return; }
       const base=from.toK?from.toK(x.value):x.value*from.f;
       x.value=to.fromK?to.fromK(base):base/to.f; x.unit=unit;
       status(`Converted → ${unit}`); shifted=false;
@@ -369,7 +361,6 @@ function softkey(idx) {
   }
 }
 
-// ── Input ──────────────────────────────────────────────────────────────────
 function digit(c) {
   if (mode!=='normal') return;
   if (c==='/' && input.includes('/')) return;
@@ -402,7 +393,6 @@ function commitInput() {
   stack.push(...vals); input=''; return true;
 }
 
-// ── Stack Ops ──────────────────────────────────────────────────────────────
 function handleEnter() {
   if (mode!=='normal') return;
   if (input.trim()) { if(!commitInput()) return; }
@@ -425,7 +415,6 @@ function clearAll() {
   setSoftkeys([]); status(''); render();
 }
 
-// ── Arithmetic ────────────────────────────────────────────────────────────
 function operate(op) {
   if(mode!=='normal') return; if(!commitInput()) return;
   if(stack.length<2){status('Need ≥ 2 values',true);return;}
@@ -445,7 +434,6 @@ function operate(op) {
   stack.splice(stack.length-2,2,r); render();
 }
 
-// ── Mode Toggles ───────────────────────────────────────────────────────────
 function toggleDisplayMode(){displayMode=displayMode==='fraction'?'decimal':'fraction';status(`Display: ${displayMode}`);render();}
 function toggleShift(){shifted=!shifted;render();}
 function toggleUnitsMode(){
@@ -454,115 +442,69 @@ function toggleUnitsMode(){
   render();
 }
 
-// ── PWA Setup ─────────────────────────────────────────────────────────────
-// Inline manifest via blob
+// ── PWA ───────────────────────────────────────────────────────────────────
 const manifest = {
-  name: "RPN Fraction Calculator",
-  short_name: "RPN Calc",
-  start_url: ".",
-  display: "standalone",
-  background_color: "#d7d7d7",
-  theme_color: "#2c3040",
-  orientation: "portrait",
-  icons: [
-    { src: makeIcon(192), sizes: "192x192", type: "image/png" },
-    { src: makeIcon(512), sizes: "512x512", type: "image/png" }
-  ]
+  name:"RPN Fraction Calculator", short_name:"RPN Calc",
+  start_url:".", display:"standalone",
+  background_color:"#d7d7d7", theme_color:"#2c3040", orientation:"portrait",
+  icons:[{src:makeIcon(192),sizes:"192x192",type:"image/png"},{src:makeIcon(512),sizes:"512x512",type:"image/png"}]
 };
-
 function makeIcon(size) {
-  const c = document.createElement('canvas');
-  c.width = c.height = size;
-  const ctx = c.getContext('2d');
-  // Background
-  ctx.fillStyle = '#2d3138';
-  ctx.beginPath();
-  ctx.roundRect(0, 0, size, size, size*0.18);
-  ctx.fill();
-  // Display area
-  ctx.fillStyle = '#1e2126';
-  ctx.beginPath();
-  ctx.roundRect(size*0.08, size*0.08, size*0.84, size*0.35, size*0.06);
-  ctx.fill();
-  // Text
-  ctx.fillStyle = '#4da3ff';
-  ctx.font = `bold ${size*0.22}px monospace`;
-  ctx.textAlign = 'center';
-  ctx.fillText('RPN', size/2, size*0.32);
-  // Keys
-  const cols=3, rows=3, ks=size*0.13, gap=size*0.04;
-  const ox=(size-(cols*ks+(cols-1)*gap))/2;
-  const oy=size*0.52;
-  [[0,0,'÷'],[1,0,'×'],[2,0,'−'],
-   [0,1,'7'],[1,1,'8'],[2,1,'9'],
-   [0,2,'+'],[1,2,'0'],[2,2,'=']].forEach(([col,row,lbl])=>{
-    const x=ox+col*(ks+gap), y=oy+row*(ks+gap);
-    ctx.fillStyle = lbl.match(/[÷×−+]/) ? '#2d7cff' : '#8e9399';
-    ctx.beginPath();
-    ctx.roundRect(x,y,ks,ks,ks*0.2);
-    ctx.fill();
-    ctx.fillStyle='white';
-    ctx.font=`bold ${ks*0.5}px sans-serif`;
-    ctx.fillText(lbl, x+ks/2, y+ks*0.68);
+  const c=document.createElement('canvas'); c.width=c.height=size;
+  const ctx=c.getContext('2d');
+  ctx.fillStyle='#2d3138'; ctx.beginPath(); ctx.roundRect(0,0,size,size,size*0.18); ctx.fill();
+  ctx.fillStyle='#1e2126'; ctx.beginPath(); ctx.roundRect(size*0.08,size*0.08,size*0.84,size*0.35,size*0.06); ctx.fill();
+  ctx.fillStyle='#4da3ff'; ctx.font=`bold ${size*0.22}px monospace`; ctx.textAlign='center'; ctx.fillText('RPN',size/2,size*0.32);
+  const ks=size*0.13,gap=size*0.04,ox=(size-(3*ks+2*gap))/2,oy=size*0.52;
+  [['÷',2,0],['×',2,1],['−',2,2],['7',0,1],['8',1,1],['9',2,0],['4',0,2],['5',1,2],['+'  ,0,3]].forEach(([l,col,row])=>{
+    const x=ox+col*(ks+gap),y=oy+row*(ks+gap);
+    ctx.fillStyle=l.match(/[÷×−+]/)?'#2d7cff':'#8e9399';
+    ctx.beginPath(); ctx.roundRect(x,y,ks,ks,ks*0.2); ctx.fill();
+    ctx.fillStyle='white'; ctx.font=`bold ${ks*0.5}px sans-serif`; ctx.fillText(l,x+ks/2,y+ks*0.68);
   });
   return c.toDataURL('image/png');
 }
-
-// Inject manifest link
-const mBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
-const mUrl  = URL.createObjectURL(mBlob);
-const mLink = document.createElement('link');
-mLink.rel='manifest'; mLink.href=mUrl;
+const mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+const mLink=document.createElement('link'); mLink.rel='manifest'; mLink.href=URL.createObjectURL(mBlob);
 document.head.appendChild(mLink);
 
-// Service worker (inline via blob)
-const swCode = `
-const CACHE='rpn-calc-v1';
-self.addEventListener('install', e=>{
-  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['.'])));
-  self.skipWaiting();
-});
-self.addEventListener('activate', e=>{
-  e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
-  self.clients.claim();
-});
-self.addEventListener('fetch', e=>{
-  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
-});
-`;
-const swBlob = new Blob([swCode], {type:'application/javascript'});
-const swUrl  = URL.createObjectURL(swBlob);
+const swCode=`const CACHE='rpn-v1';
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['.'])));self.skipWaiting();});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
+self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});`;
+if('serviceWorker' in navigator)
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})),{scope:'./'});
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register(swUrl, {scope: './'})
-    .then(() => console.log('SW registered'))
-    .catch(e => console.warn('SW failed:', e));
-}
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('installBanner').classList.add('show');});
+window.addEventListener('appinstalled',()=>{$('installBanner').classList.remove('show');deferredPrompt=null;});
+function installApp(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;$('installBanner').classList.remove('show');});}
+function dismissInstall(){$('installBanner').classList.remove('show');}
 
-// Install prompt
-let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  $('installBanner').classList.add('show');
-});
-window.addEventListener('appinstalled', () => {
-  $('installBanner').classList.remove('show');
-  deferredPrompt = null;
-});
-
-function installApp() {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then(() => {
-    deferredPrompt = null;
-    $('installBanner').classList.remove('show');
-  });
-}
-function dismissInstall() { $('installBanner').classList.remove('show'); }
-
-// ── Init ──────────────────────────────────────────────────────────────────
 render();
+
+// ── Keyboard Support ──────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  switch (e.key) {
+    case '0': case '1': case '2': case '3': case '4':
+    case '5': case '6': case '7': case '8': case '9': digit(e.key); break;
+    case '.':        digit('.'); break;
+    case '/':        e.preventDefault(); digit('/'); break;
+    case ' ':        e.preventDefault(); digit(' '); break;
+    case 'Enter':    handleEnter(); break;
+    case 'Backspace': back(); break;
+    case 'Escape':   clearAll(); break;
+    case '+':        operate('+'); break;
+    case '-':        operate('−'); break;
+    case '*':        operate('×'); break;
+    case 's': case 'S': swap(); break;
+    case 'r': case 'R': rollDown(); break;
+    case 'd': case 'D': drop(); break;
+    case 'f': case 'F': toggleDisplayMode(); break;
+    case 'Shift':    break; // ignore bare shift key
+  }
+});
 </script>
 </body>
 </html>
