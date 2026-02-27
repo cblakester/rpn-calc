@@ -468,16 +468,39 @@ function operate(op) {
 }
 
 // ── Paste ─────────────────────────────────────────────────────────────────
-async function pasteValue() {
-  try {
-    const text = await navigator.clipboard.readText();
-    const clean = text.trim().replace(/,/g, '');
-    const vals = parseInput(clean);
-    if (!vals || vals.length === 0) { status('Nothing to paste', true); return; }
-    saveUndo();
-    stack.push(...vals);
-    status(`Pasted: ${text.trim()}`); render();
-  } catch(e) { status('Clipboard unavailable', true); }
+function pasteValue() {
+  // Use a hidden input to trigger Android's native paste
+  const tmp = document.createElement('input');
+  tmp.style.cssText = 'position:fixed;top:0;left:0;opacity:0;width:1px;height:1px;';
+  document.body.appendChild(tmp);
+  tmp.focus();
+  // Try modern API first, fall back to execCommand
+  if (navigator.clipboard && navigator.clipboard.readText) {
+    navigator.clipboard.readText().then(text => {
+      document.body.removeChild(tmp);
+      processPaste(text);
+    }).catch(() => {
+      // Fall back to execCommand paste into the hidden input
+      document.execCommand('paste');
+      const text = tmp.value;
+      document.body.removeChild(tmp);
+      processPaste(text);
+    });
+  } else {
+    document.execCommand('paste');
+    const text = tmp.value;
+    document.body.removeChild(tmp);
+    processPaste(text);
+  }
+}
+function processPaste(text) {
+  if (!text || !text.trim()) { status('Nothing to paste', true); return; }
+  const clean = text.trim().replace(/,/g, '');
+  const vals = parseInput(clean);
+  if (!vals || vals.length === 0) { status('Invalid paste value', true); return; }
+  saveUndo();
+  stack.push(...vals);
+  status(`Pasted: ${text.trim()}`); render();
 }
 
 // ── Mode Toggles ──────────────────────────────────────────────────────────
