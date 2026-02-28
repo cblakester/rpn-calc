@@ -10,249 +10,112 @@
 <title>RPN Calc</title>
 <style>
   :root {
-    --chrome1: #e6e6e6;
-    --chrome2: #bfc3c7;
-    --chrome3: #8e9399;
-    --accent:  #4da3ff;
-    --accent-glow: rgba(77,163,255,0.4);
-    --green:   #00c97c;
-    --red:     #e53935;
-    --yellow:  #ffb300;
-    --softkey: #9575cd;
-    --gap-color: #7a7a8a;
+    --chrome1: #e6e6e6; --chrome2: #bfc3c7; --chrome3: #8e9399;
+    --accent: #4da3ff; --accent-glow: rgba(77,163,255,0.4);
+    --green: #00c97c; --red: #e53935; --yellow: #ffb300;
+    --softkey: #9575cd; --gap-color: #7a7a8a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: "Segoe UI", Roboto, Arial, sans-serif;
     background: linear-gradient(135deg, #d7d7d7, #f5f5f5 40%, #cfcfcf 70%, #f2f2f2);
     min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    display: flex; align-items: flex-start; justify-content: center;
     padding: 24px 16px;
     padding-top: max(24px, env(safe-area-inset-top));
     padding-bottom: max(24px, env(safe-area-inset-bottom));
   }
   .calc { width: 100%; max-width: 480px; }
 
-  /* ── Display ── */
   .display {
     background: linear-gradient(145deg, #2d3138, #1e2126);
-    border-radius: 14px;
-    padding: 14px 16px;
+    border-radius: 14px; padding: 14px 16px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.35);
-    color: white;
-    margin-bottom: 10px;
+    color: white; margin-bottom: 10px;
   }
-  .stack-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-    opacity: 0.75;
-    padding: 2px 0;
-  }
+  .stack-row { display: flex; justify-content: space-between; font-size: 16px; opacity: 0.75; padding: 2px 0; }
   .stack-row .lbl { opacity: 0.55; min-width: 28px; }
   .stack-row.level1 { opacity: 1; font-size: 19px; font-weight: 600; }
-  .input-line {
-    margin-top: 10px;
-    font-size: 26px;
-    font-weight: 700;
-    min-height: 34px;
-    color: #fff;
-    letter-spacing: 0.5px;
-  }
+  .input-line { margin-top: 10px; font-size: 26px; font-weight: 700; min-height: 34px; color: #fff; letter-spacing: 0.5px; }
   .input-line .cursor { animation: blink 1s step-end infinite; }
   @keyframes blink { 50% { opacity: 0; } }
-  .status-line {
-    margin-top: 6px;
-    font-size: 13px;
-    min-height: 18px;
-    color: var(--accent);
-    text-shadow: 0 0 8px var(--accent-glow);
-    letter-spacing: 0.3px;
-  }
+  .status-line { margin-top: 6px; font-size: 13px; min-height: 18px; color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); letter-spacing: 0.3px; }
 
-  /* ── Softkeys ── */
-  .softkeys {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
-    margin-bottom: 8px;
-  }
+  .softkeys { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; margin-bottom: 8px; }
   .softkeys button {
-    padding: 10px 2px;
-    font-size: 13px;
-    font-weight: 700;
-    border-radius: 8px;
-    border: none;
-    background: linear-gradient(#d1c4e9, var(--softkey));
-    color: white;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    cursor: pointer;
-    min-height: 38px;
-    transition: opacity 0.15s;
+    padding: 10px 2px; font-size: 13px; font-weight: 700; border-radius: 8px; border: none;
+    background: linear-gradient(#d1c4e9, var(--softkey)); color: white;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2); cursor: pointer; min-height: 38px; transition: opacity 0.15s;
   }
   .softkeys button:disabled { opacity: 0.25; cursor: default; }
   .softkeys button:not(:disabled):active { transform: scale(0.95); }
 
-  /* ── Controls ── */
-  .controls {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 8px;
-    margin-bottom: 10px;
-    align-items: stretch;
-  }
-  select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    background: linear-gradient(var(--chrome1), var(--chrome2));
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  #trimBtn {
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: none;
-    background: linear-gradient(#5cb0ff, #2d7cff);
-    color: white;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: opacity 0.2s;
-  }
-  #trimBtn:disabled { opacity: 0.3; cursor: default; }
+  .controls { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; margin-bottom: 10px; align-items: stretch; }
+  select { width: 100%; padding: 10px; border-radius: 8px; border: none; background: linear-gradient(var(--chrome1), var(--chrome2)); font-weight: 600; font-size: 14px; cursor: pointer; }
+  #trimBtn { padding: 10px 14px; border-radius: 8px; border: none; background: linear-gradient(#5cb0ff, #2d7cff); color: white; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
 
-  /* ── Keypad ── */
-  .keypad-wrap {
-    background: var(--gap-color);
-    border-radius: 14px;
-    padding: 10px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-  }
+  .keypad-wrap { background: var(--gap-color); border-radius: 14px; padding: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
   .keypad { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 8px; }
   .key {
-    padding: 16px 4px;
-    font-size: 16px;
-    font-weight: 700;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(var(--chrome1), var(--chrome3));
-    box-shadow: 0 4px 8px rgba(0,0,0,0.22);
-    cursor: pointer;
-    touch-action: manipulation;
-    transition: transform 0.08s;
-    position: relative;
+    padding: 16px 4px; font-size: 16px; font-weight: 700; border-radius: 10px; border: none;
+    background: linear-gradient(var(--chrome1), var(--chrome3)); box-shadow: 0 4px 8px rgba(0,0,0,0.22);
+    cursor: pointer; touch-action: manipulation; transition: transform 0.08s; position: relative;
     -webkit-tap-highlight-color: transparent;
   }
   .key:active { transform: scale(0.94); }
-  .key.op     { background: linear-gradient(#5cb0ff, #2d7cff); color: white; }
-  .key.enter  { background: linear-gradient(#5dffb5, var(--green)); color: #003d26; grid-column: span 2; }
+  .key.op    { background: linear-gradient(#5cb0ff, #2d7cff); color: white; }
+  .key.enter { background: linear-gradient(#5dffb5, var(--green)); color: #003d26; grid-column: span 2; }
   .key.danger { background: linear-gradient(#ff7b7b, var(--red)); color: white; }
-  .key.stack  { background: linear-gradient(#ffe082, var(--yellow)); color: #5c3e00; }
-  .key.shift  { background: linear-gradient(#ffeb3b, #f57f17); color: #3e2000; }
+  .key.stack { background: linear-gradient(#ffe082, var(--yellow)); color: #5c3e00; }
+  .key.shift { background: linear-gradient(#ffeb3b, #f57f17); color: #3e2000; }
   .key.shift.active { background: linear-gradient(#f57f17, #ff9800); color: white; box-shadow: 0 0 12px #ff980088; }
-  .key.stub   { opacity: 0.35; cursor: default; }
+  .key.stub  { opacity: 0.35; cursor: default; }
 
-  /* ── Install Banner ── */
   #installBanner {
-    display: none;
-    background: linear-gradient(135deg, #4da3ff, #2d7cff);
-    color: white;
-    border-radius: 10px;
-    padding: 10px 14px;
-    margin-bottom: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+    display: none; background: linear-gradient(135deg, #4da3ff, #2d7cff); color: white;
+    border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; font-size: 14px; font-weight: 600;
+    align-items: center; justify-content: space-between; gap: 8px;
   }
   #installBanner.show { display: flex; }
-  #installBanner button {
-    background: white; color: #2d7cff; border: none;
-    border-radius: 6px; padding: 6px 14px;
-    font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap;
-  }
+  #installBanner button { background: white; color: #2d7cff; border: none; border-radius: 6px; padding: 6px 14px; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
   #dismissInstall { background: transparent !important; color: white !important; padding: 4px 8px !important; font-size: 18px !important; }
 
-  /* ── Paste Modal ── */
-  #pasteModal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-  }
+  #pasteModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; z-index: 100; }
   #pasteModal.show { display: flex; }
-  #pasteBox {
-    background: #2d3138;
-    border-radius: 14px;
-    padding: 22px;
-    width: 85%;
-    max-width: 360px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-  }
+  #pasteBox { background: #2d3138; border-radius: 14px; padding: 22px; width: 85%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
   #pasteBox p { color: #aaa; font-size: 13px; margin-bottom: 12px; line-height: 1.5; }
-  #pasteInput {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 2px solid var(--accent);
-    background: #1e2126;
-    color: white;
-    font-size: 22px;
-    font-weight: 600;
-    outline: none;
-    margin-bottom: 14px;
-    text-align: right;
-  }
+  #pasteInput { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid var(--accent); background: #1e2126; color: white; font-size: 22px; font-weight: 600; outline: none; margin-bottom: 14px; text-align: right; }
   .paste-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .paste-btns button { padding: 13px; border-radius: 8px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; }
-  #pasteOk     { background: linear-gradient(#5dffb5, #00c97c); color: #003d26; }
+  #pasteOk { background: linear-gradient(#5dffb5, #00c97c); color: #003d26; }
   #pasteCancel { background: linear-gradient(#ff7b7b, #e53935); color: white; }
 </style>
 </head>
 <body>
 <div class="calc">
 
-  <!-- Install Banner -->
   <div id="installBanner">
     <span>Add to Home Screen for app experience</span>
     <button onclick="installApp()">Install</button>
     <button id="dismissInstall" onclick="dismissInstall()">✕</button>
   </div>
 
-  <!-- Display -->
   <div class="display">
     <div id="stackDisplay"></div>
     <div class="input-line" id="inputLine"></div>
     <div class="status-line" id="statusLine"></div>
   </div>
 
-  <!-- Softkeys -->
   <div class="softkeys" id="softkeyBar">
-    <button id="skA" disabled>—</button>
-    <button id="skB" disabled>—</button>
-    <button id="skC" disabled>—</button>
-    <button id="skD" disabled>—</button>
-    <button id="skE" disabled>—</button>
-    <button id="skF" disabled>—</button>
+    <button id="skA" disabled>—</button><button id="skB" disabled>—</button>
+    <button id="skC" disabled>—</button><button id="skD" disabled>—</button>
+    <button id="skE" disabled>—</button><button id="skF" disabled>—</button>
   </div>
 
-  <!-- Controls -->
   <div class="controls">
     <select id="precision" onchange="render()">
-      <option value="8">1/8</option>
-      <option value="16" selected>1/16</option>
-      <option value="32">1/32</option>
-      <option value="64">1/64</option>
+      <option value="8">1/8</option><option value="16" selected>1/16</option>
+      <option value="32">1/32</option><option value="64">1/64</option>
     </select>
     <select id="roundMode" onchange="render()">
       <option value="nearest">Nearest</option>
@@ -262,32 +125,26 @@
     <button id="trimBtn" onclick="trimDecimal()">TRIM</button>
   </div>
 
-  <!-- Keypad -->
   <div class="keypad-wrap">
     <div class="keypad">
-
-      <!-- Row 1: AC | UNDO | 1,000 | DEC/FRAC | ⌫ -->
       <button class="key danger"                         onclick="clearAll()">AC</button>
       <button class="key stack"                          onclick="undo()">UNDO</button>
       <button class="key op"     id="commaBtn"           onclick="toggleCommas()">1,000</button>
       <button class="key op"     style="font-size:11px;" onclick="toggleDisplayMode()">DEC/FRAC</button>
       <button class="key danger"                         onclick="back()">⌫</button>
 
-      <!-- Row 2: ENTER(x2) | SWAP | R↓ | DROP -->
       <button class="key enter"                          onclick="handleEnter()">ENTER</button>
       <button class="key stack"                          onclick="swap()">SWAP</button>
       <button class="key stack"                          onclick="rollDown()">R↓</button>
       <button class="key danger"                         onclick="drop()">DROP</button>
 
-      <!-- Row 3: UNITS | 7 | 8 | 9 | ÷ -->
       <button class="key op"                             onclick="toggleUnitsMode()">UNITS</button>
       <button class="key"                                onclick="digit('7')">7</button>
       <button class="key"                                onclick="digit('8')">8</button>
       <button class="key"                                onclick="digit('9')">9</button>
       <button class="key op"                             onclick="operate('÷')">÷</button>
 
-      <!-- Row 4: SHIFT | 4 | 5 | 6 | × -->
-      <button class="key shift" id="shiftBtn"            onclick="toggleShift()">
+      <button class="key shift"  id="shiftBtn"           onclick="toggleShift()">
         <svg width="28" height="18" viewBox="0 0 28 18" fill="none">
           <line x1="22" y1="15" x2="22" y2="6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
           <line x1="22" y1="6"  x2="4"  y2="6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
@@ -299,32 +156,27 @@
       <button class="key"                                onclick="digit('6')">6</button>
       <button class="key op"                             onclick="operate('×')">×</button>
 
-      <!-- Row 5: PASTE | 1 | 2 | 3 | − -->
       <button class="key op"                             onclick="openPasteModal()">PASTE</button>
       <button class="key"                                onclick="digit('1')">1</button>
       <button class="key"                                onclick="digit('2')">2</button>
       <button class="key"                                onclick="digit('3')">3</button>
       <button class="key op"                             onclick="operate('−')">−</button>
 
-      <!-- Row 6: / | 0 | . | SPC | + -->
       <button class="key op"                             onclick="digit('/')">／</button>
       <button class="key"                                onclick="digit('0')">0</button>
       <button class="key"                                onclick="digit('.')">.</button>
       <button class="key"                                onclick="digit(' ')">SPC</button>
       <button class="key op"                             onclick="operate('+')">+</button>
-
     </div>
   </div>
-
 </div>
 
-<!-- Paste Modal -->
 <div id="pasteModal">
   <div id="pasteBox">
     <p>Long-press the field below, tap <strong style="color:white;">Paste</strong>, then press OK</p>
     <input id="pasteInput" type="text" inputmode="decimal" placeholder="Paste here…"/>
     <div class="paste-btns">
-      <button id="pasteOk"     onclick="confirmPaste()">OK</button>
+      <button id="pasteOk" onclick="confirmPaste()">OK</button>
       <button id="pasteCancel" onclick="closePasteModal()">Cancel</button>
     </div>
   </div>
@@ -334,78 +186,86 @@
 // ── State ─────────────────────────────────────────────────────────────────
 let stack = [], lastStack = null, input = "",
     mode = 'normal', shifted = false, currentCat = null,
-    displayMode = 'fraction', commaMode = false, trimDecimals = null;
+    displayMode = 'fraction', commaMode = false,
+    decimalPlaces = null; // null = auto (show naturally), number = trimmed precision
 
 // ── Unit Data ─────────────────────────────────────────────────────────────
 const CATEGORIES = ['Length','Area','Volume','Temp','Weight','Speed'];
 const CAT_UNITS = {
-  Length: ['in','ft','mi','mm','cm','m'],
-  Area:   ['in²','ft²','mi²','mm²','cm²','m²'],
-  Volume: ['in³','ft³','gal','L','cm³','m³'],
-  Temp:   ['°F','°C','K',null,null,null],
-  Weight: ['lb','oz','ton','g','kg','tonne'],
-  Speed:  ['mph','fps','kph','m/s','knot',null]
+  Length:['in','ft','mi','mm','cm','m'],
+  Area:  ['in²','ft²','mi²','mm²','cm²','m²'],
+  Volume:['in³','ft³','gal','L','cm³','m³'],
+  Temp:  ['°F','°C','K',null,null,null],
+  Weight:['lb','oz','ton','g','kg','tonne'],
+  Speed: ['mph','fps','kph','m/s','knot',null]
 };
 const UNITS = {
-  'in':    {dim:'length',f:0.0254},    'ft':    {dim:'length',f:0.3048},
-  'mi':    {dim:'length',f:1609.34},   'mm':    {dim:'length',f:0.001},
-  'cm':    {dim:'length',f:0.01},      'm':     {dim:'length',f:1},
-  'in²':   {dim:'area',  f:6.4516e-4}, 'ft²':   {dim:'area',  f:0.092903},
-  'mi²':   {dim:'area',  f:2.589988e6},'mm²':   {dim:'area',  f:1e-6},
-  'cm²':   {dim:'area',  f:1e-4},      'm²':    {dim:'area',  f:1},
-  'in³':   {dim:'volume',f:1.6387e-5}, 'ft³':   {dim:'volume',f:0.0283168},
-  'gal':   {dim:'volume',f:0.00378541},'L':     {dim:'volume',f:0.001},
-  'cm³':   {dim:'volume',f:1e-6},      'm³':    {dim:'volume',f:1},
-  '°F':    {dim:'temp',  toK:v=>(v-32)*5/9+273.15, fromK:v=>(v-273.15)*9/5+32},
-  '°C':    {dim:'temp',  toK:v=>v+273.15,           fromK:v=>v-273.15},
-  'K':     {dim:'temp',  toK:v=>v,                  fromK:v=>v},
-  'lb':    {dim:'mass',  f:0.453592},  'oz':    {dim:'mass',  f:0.0283495},
-  'ton':   {dim:'mass',  f:907.185},   'g':     {dim:'mass',  f:0.001},
-  'kg':    {dim:'mass',  f:1},         'tonne': {dim:'mass',  f:1000},
-  'mph':   {dim:'speed', f:0.44704},   'fps':   {dim:'speed', f:0.3048},
-  'kph':   {dim:'speed', f:0.277778},  'm/s':   {dim:'speed', f:1},
-  'knot':  {dim:'speed', f:0.514444}
+  'in':  {dim:'length',f:0.0254},  'ft':   {dim:'length',f:0.3048},
+  'mi':  {dim:'length',f:1609.34}, 'mm':   {dim:'length',f:0.001},
+  'cm':  {dim:'length',f:0.01},    'm':    {dim:'length',f:1},
+  'in²': {dim:'area',f:6.4516e-4},'ft²':  {dim:'area',f:0.092903},
+  'mi²': {dim:'area',f:2.589988e6},'mm²': {dim:'area',f:1e-6},
+  'cm²': {dim:'area',f:1e-4},     'm²':   {dim:'area',f:1},
+  'in³': {dim:'volume',f:1.6387e-5},'ft³':{dim:'volume',f:0.0283168},
+  'gal': {dim:'volume',f:0.00378541},'L':  {dim:'volume',f:0.001},
+  'cm³': {dim:'volume',f:1e-6},    'm³':  {dim:'volume',f:1},
+  '°F':  {dim:'temp',toK:v=>(v-32)*5/9+273.15,fromK:v=>(v-273.15)*9/5+32},
+  '°C':  {dim:'temp',toK:v=>v+273.15,fromK:v=>v-273.15},
+  'K':   {dim:'temp',toK:v=>v,fromK:v=>v},
+  'lb':  {dim:'mass',f:0.453592}, 'oz':   {dim:'mass',f:0.0283495},
+  'ton': {dim:'mass',f:907.185},  'g':    {dim:'mass',f:0.001},
+  'kg':  {dim:'mass',f:1},        'tonne':{dim:'mass',f:1000},
+  'mph': {dim:'speed',f:0.44704}, 'fps':  {dim:'speed',f:0.3048},
+  'kph': {dim:'speed',f:0.277778},'m/s':  {dim:'speed',f:1},
+  'knot':{dim:'speed',f:0.514444}
 };
 
-// ── Helpers ───────────────────────────────────────────────────────────────
 const $ = id => document.getElementById(id);
 const gcd = (a,b) => b ? gcd(b,a%b) : a;
 
-function saveUndo() { lastStack = stack.map(item => ({...item})); }
+// ── Undo ──────────────────────────────────────────────────────────────────
+function saveUndo() { lastStack = stack.map(i=>({...i})); }
 function undo() {
-  if (!lastStack) { status('Nothing to undo', true); return; }
-  stack = lastStack; lastStack = null; input = '';
+  if (!lastStack) { status('Nothing to undo',true); return; }
+  stack=lastStack; lastStack=null; input=''; decimalPlaces=null;
   status('Undone'); render();
 }
 
-function addCommas(s) {
-  return s.replace(/^(-?\d+)/, n => n.replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+// ── Format ────────────────────────────────────────────────────────────────
+function fmtDecimal(val) {
+  // Use a clean representation — cap at 10 digits to avoid float noise
+  // then strip trailing zeros
+  const places = decimalPlaces !== null ? decimalPlaces : 10;
+  const s = val.toFixed(places);
+  // Strip trailing zeros after decimal
+  return s.includes('.') ? s.replace(/\.?0+$/,'') : s;
 }
+
+function addCommas(s) {
+  return s.replace(/^(-?\d+)/, n => n.replace(/\B(?=(\d{3})+(?!\d))/g,','));
+}
+
 function fmtNum(val) {
   if (!Number.isFinite(val)) return "ERR";
-  if (displayMode === 'decimal') {
-    const decimals = trimDecimals !== null ? trimDecimals : 10;
-    return parseFloat(val.toFixed(decimals)).toString();
-  }
-  const denom = parseInt($('precision').value) || 16;
+  if (displayMode === 'decimal') return fmtDecimal(val);
+  const denom = parseInt($('precision').value)||16;
   const rm = $('roundMode').value;
-  let n = val * denom;
-  n = rm==='nearest' ? Math.round(n) : rm==='up' ? Math.ceil(n) : Math.floor(n);
+  let n = val*denom;
+  n = rm==='nearest'?Math.round(n):rm==='up'?Math.ceil(n):Math.floor(n);
   if (n===0) return '0';
-  const sign = n<0 ? '-' : '';
-  n = Math.abs(n);
-  const g=gcd(n,denom), nr=n/g, dr=denom/g;
-  const whole=Math.floor(nr/dr), rem=nr%dr;
+  const sign=n<0?'-':''; n=Math.abs(n);
+  const g=gcd(n,denom),nr=n/g,dr=denom/g;
+  const whole=Math.floor(nr/dr),rem=nr%dr;
   if (rem===0) return sign+whole;
   if (whole===0) return sign+rem+'/'+dr;
   return sign+whole+' '+rem+'/'+dr;
 }
 function fmtVal({value,unit}) {
-  let s = fmtNum(value);
-  if (commaMode) s = addCommas(s);
-  return s + (unit ? ' '+unit : '');
+  let s=fmtNum(value);
+  if (commaMode) s=addCommas(s);
+  return s+(unit?' '+unit:'');
 }
-function status(msg, isErr=false) {
+function status(msg,isErr=false) {
   const el=$('statusLine');
   el.textContent=msg;
   el.style.color=isErr?'#ff6e6e':'';
@@ -415,51 +275,45 @@ function status(msg, isErr=false) {
 // ── Render ────────────────────────────────────────────────────────────────
 function render() {
   const len=stack.length, rows=[];
-  for (let lvl=1; lvl<=5; lvl++) {
+  for (let lvl=1;lvl<=5;lvl++) {
     const idx=len-lvl;
-    rows.push({lvl, item: idx>=0 ? stack[idx] : null});
+    rows.push({lvl, item:idx>=0?stack[idx]:null});
   }
-  $('stackDisplay').innerHTML = rows.map(({lvl,item}) =>
-    `<div class="stack-row${lvl===1?' level1':''}">` +
-    `<span class="lbl">X${lvl}</span>` +
-    `<span>${item ? fmtVal(item) : ''}</span></div>`
+  $('stackDisplay').innerHTML=rows.map(({lvl,item})=>
+    `<div class="stack-row${lvl===1?' level1':''}"><span class="lbl">X${lvl}</span><span>${item?fmtVal(item):''}</span></div>`
   ).reverse().join('');
-
-  $('inputLine').innerHTML = (input ? escHtml(input) : '') + '<span class="cursor">▎</span>';
-  $('shiftBtn').classList.toggle('active', shifted);
+  $('inputLine').innerHTML=(input?escHtml(input):')+'<span class="cursor">▎</span>';
+  $('shiftBtn').classList.toggle('active',shifted);
   if (mode==='categories') status('Select category →');
   else if (mode==='units') status(`Attach unit (${shifted?'SHIFT=convert':''}) → ${currentCat}`);
 }
-function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 // ── Softkeys ──────────────────────────────────────────────────────────────
 function setSoftkeys(labels) {
-  ['skA','skB','skC','skD','skE','skF'].forEach((id,i) => {
-    const btn=$(id), lbl=labels[i]||null;
+  ['skA','skB','skC','skD','skE','skF'].forEach((id,i)=>{
+    const btn=$(id),lbl=labels[i]||null;
     btn.textContent=lbl||'—'; btn.disabled=!lbl;
     btn.onclick=lbl?()=>softkey(i):null;
   });
 }
 function softkey(idx) {
-  if (mode==='categories') {
-    currentCat=CATEGORIES[idx]; mode='units';
-    setSoftkeys(CAT_UNITS[currentCat]); render(); return;
-  }
-  if (mode==='units') {
+  if (mode==='categories'){currentCat=CATEGORIES[idx];mode='units';setSoftkeys(CAT_UNITS[currentCat]);render();return;}
+  if (mode==='units'){
     const unit=CAT_UNITS[currentCat]?.[idx];
     if (!unit) return;
     if (!commitInput()) return;
-    if (!stack.length) { status('Stack empty',true); return; }
+    if (!stack.length){status('Stack empty',true);return;}
     const x=stack[stack.length-1];
-    if (shifted) {
-      const from=UNITS[x.unit], to=UNITS[unit];
-      if (!x.unit)           { status('No unit to convert',true); return; }
-      if (!from||!to)        { status('Unknown unit',true); return; }
-      if (from.dim!==to.dim) { status('Incompatible dimensions',true); return; }
+    if (shifted){
+      const from=UNITS[x.unit],to=UNITS[unit];
+      if (!x.unit){status('No unit to convert',true);return;}
+      if (!from||!to){status('Unknown unit',true);return;}
+      if (from.dim!==to.dim){status('Incompatible dimensions',true);return;}
       const base=from.toK?from.toK(x.value):x.value*from.f;
       x.value=to.fromK?to.fromK(base):base/to.f; x.unit=unit;
       status(`Converted → ${unit}`); shifted=false;
-    } else { x.unit=unit; status(`Attached ${unit}`); }
+    } else {x.unit=unit;status(`Attached ${unit}`);}
     render();
   }
 }
@@ -467,200 +321,181 @@ function softkey(idx) {
 // ── Input ─────────────────────────────────────────────────────────────────
 function digit(c) {
   if (mode!=='normal') return;
-  if (c==='/' && input.includes('/')) return;
-  if (c==='.' && input.split('/').pop().includes('.')) return;
-  if (c===' ' && input.endsWith(' ')) return;
+  if (c==='/'&&input.includes('/')) return;
+  if (c==='.'&&input.split('/').pop().includes('.')) return;
+  if (c===' '&&input.endsWith(' ')) return;
   input+=c; render();
 }
-function back() { input=input.trimEnd().slice(0,-1); render(); }
+function back(){input=input.trimEnd().slice(0,-1);render();}
 
-function parseToken(s) {
-  if (s.includes('/')) { const [n,d]=s.split('/').map(Number); return d?n/d:NaN; }
+function parseToken(s){
+  if (s.includes('/')){const[n,d]=s.split('/').map(Number);return d?n/d:NaN;}
   return Number(s);
 }
-function parseInput(s) {
-  s=s.trim(); if(!s) return [];
+function parseInput(s){
+  s=s.trim();if(!s)return[];
   const parts=s.split(/\s+/);
-  if (parts.length===2 && parts[1].includes('/')) {
-    const w=Number(parts[0]), f=parseToken(parts[1]);
-    if (!isFinite(w)||!isFinite(f)) return null;
+  if (parts.length===2&&parts[1].includes('/')){
+    const w=Number(parts[0]),f=parseToken(parts[1]);
+    if (!isFinite(w)||!isFinite(f))return null;
     return [{value:w+(w<0?-f:f),unit:null}];
   }
   const res=[];
-  for (const p of parts) { const v=parseToken(p); if(!isFinite(v)) return null; res.push({value:v,unit:null}); }
+  for (const p of parts){const v=parseToken(p);if(!isFinite(v))return null;res.push({value:v,unit:null});}
   return res;
 }
-function commitInput() {
-  if (!input.trim()) return true;
+function commitInput(){
+  if (!input.trim())return true;
   const vals=parseInput(input);
-  if (!vals) { status('Invalid input',true); return false; }
-  stack.push(...vals); input=''; return true;
+  if (!vals){status('Invalid input',true);return false;}
+  stack.push(...vals);input='';decimalPlaces=null;return true;
 }
 
 // ── Stack Ops ─────────────────────────────────────────────────────────────
-function handleEnter() {
-  if (mode!=='normal') return;
+function handleEnter(){
+  if (mode!=='normal')return;
   saveUndo();
-  if (input.trim()) { if(!commitInput()) return; }
-  else if (stack.length) stack.push({...stack[stack.length-1]});
+  if (input.trim()){if(!commitInput())return;}
+  else if (stack.length)stack.push({...stack[stack.length-1]});
   render();
 }
-function drop() {
-  saveUndo();
-  if (input.trim()) input=''; else if(stack.length) stack.pop();
-  render();
-}
-function swap() {
-  if(mode!=='normal') return; if(!commitInput()) return;
+function drop(){saveUndo();if(input.trim())input='';else if(stack.length)stack.pop();decimalPlaces=null;render();}
+function swap(){
+  if(mode!=='normal')return;if(!commitInput())return;
   if(stack.length<2){status('Need ≥ 2 values',true);return;}
-  saveUndo();
-  const n=stack.length; [stack[n-1],stack[n-2]]=[stack[n-2],stack[n-1]]; render();
+  saveUndo();decimalPlaces=null;
+  const n=stack.length;[stack[n-1],stack[n-2]]=[stack[n-2],stack[n-1]];render();
 }
-function rollDown() {
-  if(mode!=='normal') return; if(!commitInput()) return;
-  if(stack.length<2) return;
-  saveUndo();
-  stack.unshift(stack.pop()); render();
+function rollDown(){
+  if(mode!=='normal')return;if(!commitInput())return;
+  if(stack.length<2)return;
+  saveUndo();decimalPlaces=null;stack.unshift(stack.pop());render();
 }
-function clearAll() {
-  saveUndo();
-  stack=[];input='';mode='normal';shifted=false;currentCat=null;trimDecimals=null;
-  setSoftkeys([]); status(''); render();
+function clearAll(){
+  saveUndo();stack=[];input='';mode='normal';shifted=false;currentCat=null;decimalPlaces=null;
+  setSoftkeys([]);status('');render();
 }
 
 // ── Arithmetic ────────────────────────────────────────────────────────────
-function operate(op) {
-  if(mode!=='normal') return; if(!commitInput()) return;
+function operate(op){
+  if(mode!=='normal')return;if(!commitInput())return;
   if(stack.length<2){status('Need ≥ 2 values',true);return;}
-  const x1=stack[stack.length-1], x2=stack[stack.length-2];
+  const x1=stack[stack.length-1],x2=stack[stack.length-2];
   if(op==='÷'&&x1.value===0){status('Division by zero',true);return;}
-  saveUndo();
+  saveUndo();decimalPlaces=null;
   let r={value:0,unit:null};
-  if(op==='+'||op==='−') {
+  if(op==='+'||op==='−'){
     if(x2.unit&&x1.unit){const u1=UNITS[x2.unit],u2=UNITS[x1.unit];if(!u1||!u2||u1.dim!==u2.dim){status('Incompatible units',true);return;}}
     const tb=u=>UNITS[u]?.f??1;
     const av=x2.unit?x2.value*tb(x2.unit):x2.value;
     const bv=x1.unit?x1.value*tb(x1.unit):x1.value;
     const rv=op==='+'?av+bv:av-bv;
     const ru=x2.unit||x1.unit;
-    r.value=ru?rv/tb(ru):rv; r.unit=ru;
+    r.value=ru?rv/tb(ru):rv;r.unit=ru;
   } else if(op==='×'){r.value=x2.value*x1.value;}
   else if(op==='÷'){r.value=x2.value/x1.value;}
-  stack.splice(stack.length-2,2,r); render();
+  stack.splice(stack.length-2,2,r);render();
 }
 
 // ── Trim Decimal ──────────────────────────────────────────────────────────
-function trimDecimal() {
-  if (displayMode !== 'decimal') { status('Switch to decimal mode first', true); return; }
-  if (!stack.length) { status('Stack empty', true); return; }
-  const x = stack[stack.length-1];
-  // On first press, detect current decimal places from displayed value
-  if (trimDecimals === null) {
-    const s = parseFloat(val.toFixed(10)).toString();
-    const dot = s.indexOf('.');
-    trimDecimals = dot === -1 ? 0 : s.length - dot - 1;
+function trimDecimal(){
+  if (displayMode!=='decimal'){status('Switch to decimal mode first',true);return;}
+  if (!stack.length){status('Stack empty',true);return;}
+  // On first press, figure out how many decimals are currently visible
+  if (decimalPlaces===null){
+    const s=fmtDecimal(stack[stack.length-1].value);
+    const dot=s.indexOf('.');
+    decimalPlaces=dot===-1?0:s.length-dot-1;
   }
-  if (trimDecimals === 0) { status('Already a whole number', true); return; }
+  if (decimalPlaces===0){status('Already a whole number',true);return;}
   saveUndo();
-  trimDecimals = trimDecimals - 1;
-  const factor = Math.pow(10, trimDecimals);
-  x.value = Math.round(x.value * factor) / factor;
-  status(`Trimmed to ${trimDecimals} decimal${trimDecimals !== 1 ? 's' : ''}`);
+  decimalPlaces--;
+  // Round the stored value to match so math stays consistent
+  const x=stack[stack.length-1];
+  const factor=Math.pow(10,decimalPlaces);
+  x.value=Math.round(x.value*factor)/factor;
+  status(`Trimmed to ${decimalPlaces} decimal${decimalPlaces!==1?'s':''}`);
   render();
 }
 
 // ── Paste Modal ───────────────────────────────────────────────────────────
-function openPasteModal() {
-  $('pasteInput').value='';
-  $('pasteModal').classList.add('show');
-  setTimeout(()=>$('pasteInput').focus(), 100);
-}
-function closePasteModal() { $('pasteModal').classList.remove('show'); }
-function confirmPaste() {
+function openPasteModal(){$('pasteInput').value='';$('pasteModal').classList.add('show');setTimeout(()=>$('pasteInput').focus(),100);}
+function closePasteModal(){$('pasteModal').classList.remove('show');}
+function confirmPaste(){
   const text=$('pasteInput').value.trim();
   closePasteModal();
-  if (!text) { status('Nothing to paste',true); return; }
-  const clean=text.replace(/,/g,'');
-  const vals=parseInput(clean);
-  if (!vals||vals.length===0) { status('Invalid paste value',true); return; }
-  saveUndo();
-  stack.push(...vals);
-  status(`Pasted: ${text}`); render();
+  if (!text){status('Nothing to paste',true);return;}
+  const vals=parseInput(text.replace(/,/g,''));
+  if (!vals||vals.length===0){status('Invalid paste value',true);return;}
+  saveUndo();stack.push(...vals);decimalPlaces=null;
+  status(`Pasted: ${text}`);render();
 }
-$('pasteModal').addEventListener('click', e=>{ if(e.target===$('pasteModal')) closePasteModal(); });
-$('pasteInput').addEventListener('keydown', e=>{ if(e.key==='Enter') confirmPaste(); });
+$('pasteModal').addEventListener('click',e=>{if(e.target===$('pasteModal'))closePasteModal();});
+$('pasteInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmPaste();});
 
 // ── Mode Toggles ──────────────────────────────────────────────────────────
-function toggleDisplayMode() { displayMode=displayMode==='fraction'?'decimal':'fraction'; trimDecimals=null; status(`Display: ${displayMode}`); render(); }
-function toggleCommas() { commaMode=!commaMode; $('commaBtn').style.boxShadow=commaMode?'0 0 12px #4da3ff88':''; status(`Commas: ${commaMode?'on':'off'}`); render(); }
-function toggleShift() { shifted=!shifted; render(); }
-function toggleUnitsMode() {
+function toggleDisplayMode(){displayMode=displayMode==='fraction'?'decimal':'fraction';decimalPlaces=null;status(`Display: ${displayMode}`);render();}
+function toggleCommas(){commaMode=!commaMode;$('commaBtn').style.boxShadow=commaMode?'0 0 12px #4da3ff88':'';status(`Commas: ${commaMode?'on':'off'}`);render();}
+function toggleShift(){shifted=!shifted;render();}
+function toggleUnitsMode(){
   if(mode==='normal'){mode='categories';setSoftkeys(CATEGORIES);}
   else{mode='normal';shifted=false;setSoftkeys([]);status('');}
   render();
 }
 
 // ── Keyboard ──────────────────────────────────────────────────────────────
-document.addEventListener('keydown', e => {
-  if (e.ctrlKey||e.metaKey||e.altKey) return;
-  if ($('pasteModal').classList.contains('show')) return;
-  switch(e.key) {
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if($('pasteModal').classList.contains('show'))return;
+  switch(e.key){
     case '0':case '1':case '2':case '3':case '4':
-    case '5':case '6':case '7':case '8':case '9': digit(e.key); break;
-    case '.':         digit('.'); break;
-    case '/':         e.preventDefault(); digit('/'); break;
-    case ' ':         e.preventDefault(); digit(' '); break;
-    case 'Enter':     handleEnter(); break;
-    case 'Backspace': back(); break;
-    case 'Escape':    clearAll(); break;
-    case '+':         operate('+'); break;
-    case '-':         operate('−'); break;
-    case '*':         operate('×'); break;
-    case 's':case 'S': swap(); break;
-    case 'r':case 'R': rollDown(); break;
-    case 'd':case 'D': drop(); break;
-    case 'f':case 'F': toggleDisplayMode(); break;
-    case 'c':case 'C': toggleCommas(); break;
-    case 'u':case 'U': undo(); break;
-    case 'p':case 'P': openPasteModal(); break;
-    case 't':case 'T': trimDecimal(); break;
-    case 'Shift': break;
+    case '5':case '6':case '7':case '8':case '9':digit(e.key);break;
+    case '.':digit('.');break;
+    case '/':e.preventDefault();digit('/');break;
+    case ' ':e.preventDefault();digit(' ');break;
+    case 'Enter':handleEnter();break;
+    case 'Backspace':back();break;
+    case 'Escape':clearAll();break;
+    case '+':operate('+');break;
+    case '-':operate('−');break;
+    case '*':operate('×');break;
+    case 's':case 'S':swap();break;
+    case 'r':case 'R':rollDown();break;
+    case 'd':case 'D':drop();break;
+    case 'f':case 'F':toggleDisplayMode();break;
+    case 'c':case 'C':toggleCommas();break;
+    case 'u':case 'U':undo();break;
+    case 'p':case 'P':openPasteModal();break;
+    case 't':case 'T':trimDecimal();break;
+    case 'Shift':break;
   }
 });
 
 // ── PWA ───────────────────────────────────────────────────────────────────
-const manifest = {
-  name:"RPN Fraction Calculator", short_name:"RPN Calc",
-  start_url:".", display:"standalone",
-  background_color:"#d7d7d7", theme_color:"#2c3040", orientation:"portrait",
-  icons:[{src:makeIcon(192),sizes:"192x192",type:"image/png"},{src:makeIcon(512),sizes:"512x512",type:"image/png"}]
-};
-function makeIcon(size) {
-  const c=document.createElement('canvas'); c.width=c.height=size;
+const manifest={name:"RPN Fraction Calculator",short_name:"RPN Calc",start_url:".",display:"standalone",background_color:"#d7d7d7",theme_color:"#2c3040",orientation:"portrait",icons:[{src:makeIcon(192),sizes:"192x192",type:"image/png"},{src:makeIcon(512),sizes:"512x512",type:"image/png"}]};
+function makeIcon(size){
+  const c=document.createElement('canvas');c.width=c.height=size;
   const ctx=c.getContext('2d');
-  ctx.fillStyle='#2d3138'; ctx.beginPath(); ctx.roundRect(0,0,size,size,size*0.18); ctx.fill();
-  ctx.fillStyle='#1e2126'; ctx.beginPath(); ctx.roundRect(size*0.08,size*0.08,size*0.84,size*0.35,size*0.06); ctx.fill();
-  ctx.fillStyle='#4da3ff'; ctx.font=`bold ${size*0.22}px monospace`; ctx.textAlign='center'; ctx.fillText('RPN',size/2,size*0.32);
+  ctx.fillStyle='#2d3138';ctx.beginPath();ctx.roundRect(0,0,size,size,size*0.18);ctx.fill();
+  ctx.fillStyle='#1e2126';ctx.beginPath();ctx.roundRect(size*0.08,size*0.08,size*0.84,size*0.35,size*0.06);ctx.fill();
+  ctx.fillStyle='#4da3ff';ctx.font=`bold ${size*0.22}px monospace`;ctx.textAlign='center';ctx.fillText('RPN',size/2,size*0.32);
   const ks=size*0.13,gap=size*0.04,ox=(size-(3*ks+2*gap))/2,oy=size*0.52;
   [['÷',2,0],['×',2,1],['−',2,2],['7',0,0],['8',1,0],['4',0,1],['5',1,1],['1',0,2],['2',1,2]].forEach(([l,col,row])=>{
     const x=ox+col*(ks+gap),y=oy+row*(ks+gap);
     ctx.fillStyle=l.match(/[÷×−+]/)?'#2d7cff':'#8e9399';
-    ctx.beginPath(); ctx.roundRect(x,y,ks,ks,ks*0.2); ctx.fill();
-    ctx.fillStyle='white'; ctx.font=`bold ${ks*0.5}px sans-serif`; ctx.fillText(l,x+ks/2,y+ks*0.68);
+    ctx.beginPath();ctx.roundRect(x,y,ks,ks,ks*0.2);ctx.fill();
+    ctx.fillStyle='white';ctx.font=`bold ${ks*0.5}px sans-serif`;ctx.fillText(l,x+ks/2,y+ks*0.68);
   });
   return c.toDataURL('image/png');
 }
 const mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
-const mLink=document.createElement('link'); mLink.rel='manifest'; mLink.href=URL.createObjectURL(mBlob);
+const mLink=document.createElement('link');mLink.rel='manifest';mLink.href=URL.createObjectURL(mBlob);
 document.head.appendChild(mLink);
-
-const swCode=`const CACHE='rpn-v4';
+const swCode=`const CACHE='rpn-v5';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['.'])));self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
 self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});`;
-if('serviceWorker' in navigator)
-  navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})),{scope:'./'});
-
+if('serviceWorker'in navigator)navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})),{scope:'./'});
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('installBanner').classList.add('show');});
 window.addEventListener('appinstalled',()=>{$('installBanner').classList.remove('show');deferredPrompt=null;});
