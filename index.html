@@ -98,10 +98,25 @@
   /* ── Controls ── */
   .controls {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr auto;
     gap: 8px;
     margin-bottom: 10px;
+    align-items: stretch;
   }
+  #trimBtn {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(#5cb0ff, #2d7cff);
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+  #trimBtn:disabled { opacity: 0.3; cursor: default; }
   select {
     width: 100%;
     padding: 10px;
@@ -257,6 +272,7 @@
       <option value="up">Up</option>
       <option value="down">Down</option>
     </select>
+    <button id="trimBtn" onclick="trimDecimal()">TRIM</button>
   </div>
 
   <!-- Keypad -->
@@ -375,7 +391,22 @@ function undo() {
   status('Undone'); render();
 }
 
-function addCommas(s) {
+function trimDecimal() {
+  if (displayMode !== 'decimal') { status('Switch to decimal mode first', true); return; }
+  if (!stack.length) { status('Stack empty', true); return; }
+  const x = stack[stack.length - 1];
+  // Find current number of decimal places
+  const str = String(x.value);
+  const dot = str.indexOf('.');
+  const currentDecimals = dot === -1 ? 0 : str.length - dot - 1;
+  if (currentDecimals === 0) { status('Already a whole number', true); return; }
+  saveUndo();
+  const newDecimals = currentDecimals - 1;
+  const factor = Math.pow(10, newDecimals);
+  x.value = Math.round(x.value * factor) / factor;
+  status(`Trimmed to ${newDecimals} decimal${newDecimals !== 1 ? 's' : ''}`);
+  render();
+}
   return s.replace(/^(-?\d+)/, n => n.replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 }
 function fmtNum(val) {
