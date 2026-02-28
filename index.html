@@ -384,8 +384,8 @@ function addCommas(s) {
 function fmtNum(val) {
   if (!Number.isFinite(val)) return "ERR";
   if (displayMode === 'decimal') {
-    const decimals = trimDecimals !== null ? trimDecimals : 20;
-    return val.toFixed(decimals).replace(/\.?0+$/,'') || '0';
+    const decimals = trimDecimals !== null ? trimDecimals : 10;
+    return parseFloat(val.toFixed(decimals)).toString();
   }
   const denom = parseInt($('precision').value) || 16;
   const rm = $('roundMode').value;
@@ -556,7 +556,7 @@ function trimDecimal() {
   const x = stack[stack.length-1];
   // On first press, detect current decimal places from displayed value
   if (trimDecimals === null) {
-    const s = (x.value).toPrecision(15).replace(/\.?0+$/, '');
+    const s = parseFloat(val.toFixed(10)).toString();
     const dot = s.indexOf('.');
     trimDecimals = dot === -1 ? 0 : s.length - dot - 1;
   }
