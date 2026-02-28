@@ -551,9 +551,10 @@ function trimDecimal() {
   if (displayMode !== 'decimal') { status('Switch to decimal mode first', true); return; }
   if (!stack.length) { status('Stack empty', true); return; }
   const x = stack[stack.length-1];
-  const str = String(x.value);
-  const dot = str.indexOf('.');
-  const currentDecimals = dot === -1 ? 0 : str.length - dot - 1;
+  // Work from the displayed string, not the raw float
+  const displayed = fmtNum(x.value);
+  const dot = displayed.indexOf('.');
+  const currentDecimals = dot === -1 ? 0 : displayed.length - dot - 1;
   if (currentDecimals === 0) { status('Already a whole number', true); return; }
   saveUndo();
   const newDecimals = currentDecimals - 1;
