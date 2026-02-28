@@ -193,7 +193,6 @@ var shifted = false;
 var currentCat = null;
 var displayMode = 'fraction';
 var commaMode = false;
-var decimalPlaces = null;
 
 // ── Unit Data ─────────────────────────────────────────────────────────────
 var CATEGORIES = ['Length','Area','Volume','Temp','Weight','Speed'];
@@ -249,14 +248,12 @@ function undo() {
 }
 
 // ── Format ────────────────────────────────────────────────────────────────
-function fmtDecimal(val) {
-  if (decimalPlaces !== null) {
-    // Controlled precision — just show exactly this many decimal places, strip trailing zeros
-    var s = val.toFixed(decimalPlaces);
+function fmtDecimal(val, places) {
+  if (places !== null && places !== undefined) {
+    var s = val.toFixed(places);
     if (s.indexOf('.') !== -1) s = s.replace(/0+$/, '').replace(/\.$/, '');
     return s || '0';
   }
-  // Auto mode — use toPrecision to get clean representation, max 10 significant digits
   var s = parseFloat(val.toPrecision(10)).toString();
   return s || '0';
 }
@@ -267,9 +264,9 @@ function addCommas(s) {
   });
 }
 
-function fmtNum(val) {
+function fmtNum(val, decPlaces) {
   if (!isFinite(val)) return 'ERR';
-  if (displayMode === 'decimal') return fmtDecimal(val);
+  if (displayMode === 'decimal') return fmtDecimal(val, decPlaces);
   var denom = parseInt(el('precision').value) || 16;
   var rm = el('roundMode').value;
   var n = val * denom;
@@ -285,7 +282,7 @@ function fmtNum(val) {
 }
 
 function fmtVal(item) {
-  var s = fmtNum(item.value);
+  var s = fmtNum(item.value, item.decPlaces);
   if (commaMode) s = addCommas(s);
   return s + (item.unit ? ' ' + item.unit : '');
 }
@@ -413,9 +410,11 @@ function commitInput() {
   if (!input.trim()) return true;
   var vals = parseInput(input);
   if (!vals) { status('Invalid input', true); return false; }
-  for (var i = 0; i < vals.length; i++) stack.push(vals[i]);
+  for (var i = 0; i < vals.length; i++) {
+    vals[i].decPlaces = null;
+    stack.push(vals[i]);
+  }
   input = '';
-  decimalPlaces = null;
   return true;
 }
 
@@ -505,15 +504,15 @@ function operate(op) {
 function trimDecimal() {
   if (displayMode !== 'decimal') { status('Switch to decimal mode first', true); return; }
   if (!stack.length) { status('Stack empty', true); return; }
-  // On first press, initialize from the clean auto display string
-  if (decimalPlaces === null) {
-    var s = parseFloat(stack[stack.length-1].value.toPrecision(10)).toString();
+  var x = stack[stack.length - 1]; // X1 only
+  if (x.decPlaces === null || x.decPlaces === undefined) {
+    var s = parseFloat(x.value.toPrecision(10)).toString();
     var dot = s.indexOf('.');
-    decimalPlaces = dot === -1 ? 0 : s.length - dot - 1;
+    x.decPlaces = dot === -1 ? 0 : s.length - dot - 1;
   }
-  if (decimalPlaces === 0) { status('Already a whole number', true); return; }
-  decimalPlaces--;
-  status('Trimmed to ' + decimalPlaces + ' decimal' + (decimalPlaces !== 1 ? 's' : ''));
+  if (x.decPlaces === 0) { status('Already a whole number', true); return; }
+  x.decPlaces--;
+  status('Trimmed to ' + x.decPlaces + ' decimal' + (x.decPlaces !== 1 ? 's' : ''));
   render();
 }
 
