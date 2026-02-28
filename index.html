@@ -250,12 +250,14 @@ function undo() {
 
 // ── Format ────────────────────────────────────────────────────────────────
 function fmtDecimal(val) {
-  var places = (decimalPlaces !== null) ? decimalPlaces : 10;
-  var s = val.toFixed(places);
-  // strip trailing zeros
-  if (s.indexOf('.') !== -1) {
-    s = s.replace(/0+$/, '').replace(/\.$/, '');
+  if (decimalPlaces !== null) {
+    // Controlled precision — just show exactly this many decimal places, strip trailing zeros
+    var s = val.toFixed(decimalPlaces);
+    if (s.indexOf('.') !== -1) s = s.replace(/0+$/, '').replace(/\.$/, '');
+    return s || '0';
   }
+  // Auto mode — use toPrecision to get clean representation, max 10 significant digits
+  var s = parseFloat(val.toPrecision(10)).toString();
   return s || '0';
 }
 
@@ -503,15 +505,14 @@ function operate(op) {
 function trimDecimal() {
   if (displayMode !== 'decimal') { status('Switch to decimal mode first', true); return; }
   if (!stack.length) { status('Stack empty', true); return; }
-  // On first press, initialize from what is currently visible on X1
+  // On first press, initialize from the clean auto display string
   if (decimalPlaces === null) {
-    var s = fmtDecimal(stack[stack.length - 1].value);
+    var s = parseFloat(stack[stack.length-1].value.toPrecision(10)).toString();
     var dot = s.indexOf('.');
     decimalPlaces = dot === -1 ? 0 : s.length - dot - 1;
   }
   if (decimalPlaces === 0) { status('Already a whole number', true); return; }
   decimalPlaces--;
-  // Do NOT round and store back — just change the display precision
   status('Trimmed to ' + decimalPlaces + ' decimal' + (decimalPlaces !== 1 ? 's' : ''));
   render();
 }
