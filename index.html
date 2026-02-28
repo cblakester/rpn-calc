@@ -26,7 +26,6 @@
     padding-bottom: max(24px, env(safe-area-inset-bottom));
   }
   .calc { width: 100%; max-width: 480px; }
-
   .display {
     background: linear-gradient(145deg, #2d3138, #1e2126);
     border-radius: 14px; padding: 14px 16px;
@@ -39,21 +38,18 @@
   .input-line { margin-top: 10px; font-size: 26px; font-weight: 700; min-height: 34px; color: #fff; letter-spacing: 0.5px; }
   .input-line .cursor { animation: blink 1s step-end infinite; }
   @keyframes blink { 50% { opacity: 0; } }
-  .status-line { margin-top: 6px; font-size: 13px; min-height: 18px; color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); letter-spacing: 0.3px; }
-
+  .status-line { margin-top: 6px; font-size: 13px; min-height: 18px; color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
   .softkeys { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; margin-bottom: 8px; }
   .softkeys button {
     padding: 10px 2px; font-size: 13px; font-weight: 700; border-radius: 8px; border: none;
     background: linear-gradient(#d1c4e9, var(--softkey)); color: white;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2); cursor: pointer; min-height: 38px; transition: opacity 0.15s;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2); cursor: pointer; min-height: 38px;
   }
   .softkeys button:disabled { opacity: 0.25; cursor: default; }
   .softkeys button:not(:disabled):active { transform: scale(0.95); }
-
   .controls { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; margin-bottom: 10px; align-items: stretch; }
   select { width: 100%; padding: 10px; border-radius: 8px; border: none; background: linear-gradient(var(--chrome1), var(--chrome2)); font-weight: 600; font-size: 14px; cursor: pointer; }
   #trimBtn { padding: 10px 14px; border-radius: 8px; border: none; background: linear-gradient(#5cb0ff, #2d7cff); color: white; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
-
   .keypad-wrap { background: var(--gap-color); border-radius: 14px; padding: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
   .keypad { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 8px; }
   .key {
@@ -63,23 +59,21 @@
     -webkit-tap-highlight-color: transparent;
   }
   .key:active { transform: scale(0.94); }
-  .key.op    { background: linear-gradient(#5cb0ff, #2d7cff); color: white; }
-  .key.enter { background: linear-gradient(#5dffb5, var(--green)); color: #003d26; grid-column: span 2; }
+  .key.op     { background: linear-gradient(#5cb0ff, #2d7cff); color: white; }
+  .key.enter  { background: linear-gradient(#5dffb5, var(--green)); color: #003d26; grid-column: span 2; }
   .key.danger { background: linear-gradient(#ff7b7b, var(--red)); color: white; }
-  .key.stack { background: linear-gradient(#ffe082, var(--yellow)); color: #5c3e00; }
-  .key.shift { background: linear-gradient(#ffeb3b, #f57f17); color: #3e2000; }
+  .key.stack  { background: linear-gradient(#ffe082, var(--yellow)); color: #5c3e00; }
+  .key.shift  { background: linear-gradient(#ffeb3b, #f57f17); color: #3e2000; }
   .key.shift.active { background: linear-gradient(#f57f17, #ff9800); color: white; box-shadow: 0 0 12px #ff980088; }
-  .key.stub  { opacity: 0.35; cursor: default; }
-
+  .key.stub   { opacity: 0.35; cursor: default; }
   #installBanner {
     display: none; background: linear-gradient(135deg, #4da3ff, #2d7cff); color: white;
     border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; font-size: 14px; font-weight: 600;
     align-items: center; justify-content: space-between; gap: 8px;
   }
   #installBanner.show { display: flex; }
-  #installBanner button { background: white; color: #2d7cff; border: none; border-radius: 6px; padding: 6px 14px; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
+  #installBanner button { background: white; color: #2d7cff; border: none; border-radius: 6px; padding: 6px 14px; font-weight: 700; font-size: 13px; cursor: pointer; }
   #dismissInstall { background: transparent !important; color: white !important; padding: 4px 8px !important; font-size: 18px !important; }
-
   #pasteModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; z-index: 100; }
   #pasteModal.show { display: flex; }
   #pasteBox { background: #2d3138; border-radius: 14px; padding: 22px; width: 85%; max-width: 360px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
@@ -97,7 +91,7 @@
   <div id="installBanner">
     <span>Add to Home Screen for app experience</span>
     <button onclick="installApp()">Install</button>
-    <button id="dismissInstall" onclick="dismissInstall()">✕</button>
+    <button id="dismissInstall" onclick="dismissInstall()">&#x2715;</button>
   </div>
 
   <div class="display">
@@ -107,15 +101,20 @@
   </div>
 
   <div class="softkeys" id="softkeyBar">
-    <button id="skA" disabled>—</button><button id="skB" disabled>—</button>
-    <button id="skC" disabled>—</button><button id="skD" disabled>—</button>
-    <button id="skE" disabled>—</button><button id="skF" disabled>—</button>
+    <button id="skA" disabled>&#x2014;</button>
+    <button id="skB" disabled>&#x2014;</button>
+    <button id="skC" disabled>&#x2014;</button>
+    <button id="skD" disabled>&#x2014;</button>
+    <button id="skE" disabled>&#x2014;</button>
+    <button id="skF" disabled>&#x2014;</button>
   </div>
 
   <div class="controls">
     <select id="precision" onchange="render()">
-      <option value="8">1/8</option><option value="16" selected>1/16</option>
-      <option value="32">1/32</option><option value="64">1/64</option>
+      <option value="8">1/8</option>
+      <option value="16" selected>1/16</option>
+      <option value="32">1/32</option>
+      <option value="64">1/64</option>
     </select>
     <select id="roundMode" onchange="render()">
       <option value="nearest">Nearest</option>
@@ -127,54 +126,56 @@
 
   <div class="keypad-wrap">
     <div class="keypad">
-      <button class="key danger"                         onclick="clearAll()">AC</button>
-      <button class="key stack"                          onclick="undo()">UNDO</button>
-      <button class="key op"     id="commaBtn"           onclick="toggleCommas()">1,000</button>
-      <button class="key op"     style="font-size:11px;" onclick="toggleDisplayMode()">DEC/FRAC</button>
-      <button class="key danger"                         onclick="back()">⌫</button>
-
-      <button class="key enter"                          onclick="handleEnter()">ENTER</button>
-      <button class="key stack"                          onclick="swap()">SWAP</button>
-      <button class="key stack"                          onclick="rollDown()">R↓</button>
-      <button class="key danger"                         onclick="drop()">DROP</button>
-
-      <button class="key op"                             onclick="toggleUnitsMode()">UNITS</button>
-      <button class="key"                                onclick="digit('7')">7</button>
-      <button class="key"                                onclick="digit('8')">8</button>
-      <button class="key"                                onclick="digit('9')">9</button>
-      <button class="key op"                             onclick="operate('÷')">÷</button>
-
-      <button class="key shift"  id="shiftBtn"           onclick="toggleShift()">
+      <!-- Row 1: AC | UNDO | 1,000 | DEC/FRAC | backspace -->
+      <button class="key danger" onclick="clearAll()">AC</button>
+      <button class="key stack" onclick="undo()">UNDO</button>
+      <button class="key op" id="commaBtn" onclick="toggleCommas()">1,000</button>
+      <button class="key op" style="font-size:11px;" onclick="toggleDisplayMode()">DEC/FRAC</button>
+      <button class="key danger" onclick="back()">&#x232B;</button>
+      <!-- Row 2: ENTER | SWAP | R↓ | DROP -->
+      <button class="key enter" onclick="handleEnter()">ENTER</button>
+      <button class="key stack" onclick="swap()">SWAP</button>
+      <button class="key stack" onclick="rollDown()">R&#x2193;</button>
+      <button class="key danger" onclick="drop()">DROP</button>
+      <!-- Row 3: UNITS | 7 | 8 | 9 | div -->
+      <button class="key op" onclick="toggleUnitsMode()">UNITS</button>
+      <button class="key" onclick="digit('7')">7</button>
+      <button class="key" onclick="digit('8')">8</button>
+      <button class="key" onclick="digit('9')">9</button>
+      <button class="key op" onclick="operate('div')">&#xF7;</button>
+      <!-- Row 4: SHIFT | 4 | 5 | 6 | times -->
+      <button class="key shift" id="shiftBtn" onclick="toggleShift()">
         <svg width="28" height="18" viewBox="0 0 28 18" fill="none">
           <line x1="22" y1="15" x2="22" y2="6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-          <line x1="22" y1="6"  x2="4"  y2="6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="22" y1="6" x2="4" y2="6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
           <polyline points="9,1 4,6 9,11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         </svg>
       </button>
-      <button class="key"                                onclick="digit('4')">4</button>
-      <button class="key"                                onclick="digit('5')">5</button>
-      <button class="key"                                onclick="digit('6')">6</button>
-      <button class="key op"                             onclick="operate('×')">×</button>
-
-      <button class="key op"                             onclick="openPasteModal()">PASTE</button>
-      <button class="key"                                onclick="digit('1')">1</button>
-      <button class="key"                                onclick="digit('2')">2</button>
-      <button class="key"                                onclick="digit('3')">3</button>
-      <button class="key op"                             onclick="operate('−')">−</button>
-
-      <button class="key op"                             onclick="digit('/')">／</button>
-      <button class="key"                                onclick="digit('0')">0</button>
-      <button class="key"                                onclick="digit('.')">.</button>
-      <button class="key"                                onclick="digit(' ')">SPC</button>
-      <button class="key op"                             onclick="operate('+')">+</button>
+      <button class="key" onclick="digit('4')">4</button>
+      <button class="key" onclick="digit('5')">5</button>
+      <button class="key" onclick="digit('6')">6</button>
+      <button class="key op" onclick="operate('times')">&#xD7;</button>
+      <!-- Row 5: PASTE | 1 | 2 | 3 | minus -->
+      <button class="key op" onclick="openPasteModal()">PASTE</button>
+      <button class="key" onclick="digit('1')">1</button>
+      <button class="key" onclick="digit('2')">2</button>
+      <button class="key" onclick="digit('3')">3</button>
+      <button class="key op" onclick="operate('minus')">&#x2212;</button>
+      <!-- Row 6: / | 0 | . | SPC | + -->
+      <button class="key op" onclick="digit('/')">&#xFF0F;</button>
+      <button class="key" onclick="digit('0')">0</button>
+      <button class="key" onclick="digit('.')">.</button>
+      <button class="key" onclick="digit(' ')">SPC</button>
+      <button class="key op" onclick="operate('plus')">+</button>
     </div>
   </div>
+
 </div>
 
 <div id="pasteModal">
   <div id="pasteBox">
     <p>Long-press the field below, tap <strong style="color:white;">Paste</strong>, then press OK</p>
-    <input id="pasteInput" type="text" inputmode="decimal" placeholder="Paste here…"/>
+    <input id="pasteInput" type="text" inputmode="decimal" placeholder="Paste here..."/>
     <div class="paste-btns">
       <button id="pasteOk" onclick="confirmPaste()">OK</button>
       <button id="pasteCancel" onclick="closePasteModal()">Cancel</button>
@@ -184,323 +185,477 @@
 
 <script>
 // ── State ─────────────────────────────────────────────────────────────────
-let stack = [], lastStack = null, input = "",
-    mode = 'normal', shifted = false, currentCat = null,
-    displayMode = 'fraction', commaMode = false,
-    decimalPlaces = null; // null = auto (show naturally), number = trimmed precision
+var stack = [];
+var lastStack = null;
+var input = "";
+var mode = 'normal';
+var shifted = false;
+var currentCat = null;
+var displayMode = 'fraction';
+var commaMode = false;
+var decimalPlaces = null;
 
 // ── Unit Data ─────────────────────────────────────────────────────────────
-const CATEGORIES = ['Length','Area','Volume','Temp','Weight','Speed'];
-const CAT_UNITS = {
-  Length:['in','ft','mi','mm','cm','m'],
-  Area:  ['in²','ft²','mi²','mm²','cm²','m²'],
-  Volume:['in³','ft³','gal','L','cm³','m³'],
-  Temp:  ['°F','°C','K',null,null,null],
-  Weight:['lb','oz','ton','g','kg','tonne'],
-  Speed: ['mph','fps','kph','m/s','knot',null]
+var CATEGORIES = ['Length','Area','Volume','Temp','Weight','Speed'];
+var CAT_UNITS = {
+  Length: ['in','ft','mi','mm','cm','m'],
+  Area:   ['in2','ft2','mi2','mm2','cm2','m2'],
+  Volume: ['in3','ft3','gal','L','cm3','m3'],
+  Temp:   ['F','C','K',null,null,null],
+  Weight: ['lb','oz','ton','g','kg','tonne'],
+  Speed:  ['mph','fps','kph','m/s','knot',null]
 };
-const UNITS = {
-  'in':  {dim:'length',f:0.0254},  'ft':   {dim:'length',f:0.3048},
-  'mi':  {dim:'length',f:1609.34}, 'mm':   {dim:'length',f:0.001},
-  'cm':  {dim:'length',f:0.01},    'm':    {dim:'length',f:1},
-  'in²': {dim:'area',f:6.4516e-4},'ft²':  {dim:'area',f:0.092903},
-  'mi²': {dim:'area',f:2.589988e6},'mm²': {dim:'area',f:1e-6},
-  'cm²': {dim:'area',f:1e-4},     'm²':   {dim:'area',f:1},
-  'in³': {dim:'volume',f:1.6387e-5},'ft³':{dim:'volume',f:0.0283168},
-  'gal': {dim:'volume',f:0.00378541},'L':  {dim:'volume',f:0.001},
-  'cm³': {dim:'volume',f:1e-6},    'm³':  {dim:'volume',f:1},
-  '°F':  {dim:'temp',toK:v=>(v-32)*5/9+273.15,fromK:v=>(v-273.15)*9/5+32},
-  '°C':  {dim:'temp',toK:v=>v+273.15,fromK:v=>v-273.15},
-  'K':   {dim:'temp',toK:v=>v,fromK:v=>v},
-  'lb':  {dim:'mass',f:0.453592}, 'oz':   {dim:'mass',f:0.0283495},
-  'ton': {dim:'mass',f:907.185},  'g':    {dim:'mass',f:0.001},
-  'kg':  {dim:'mass',f:1},        'tonne':{dim:'mass',f:1000},
-  'mph': {dim:'speed',f:0.44704}, 'fps':  {dim:'speed',f:0.3048},
-  'kph': {dim:'speed',f:0.277778},'m/s':  {dim:'speed',f:1},
-  'knot':{dim:'speed',f:0.514444}
+var CAT_LABELS = {
+  Length: ['in','ft','mi','mm','cm','m'],
+  Area:   ['in\u00B2','ft\u00B2','mi\u00B2','mm\u00B2','cm\u00B2','m\u00B2'],
+  Volume: ['in\u00B3','ft\u00B3','gal','L','cm\u00B3','m\u00B3'],
+  Temp:   ['\u00B0F','\u00B0C','K',null,null,null],
+  Weight: ['lb','oz','ton','g','kg','tonne'],
+  Speed:  ['mph','fps','kph','m/s','knot',null]
+};
+var UNITS = {
+  'in':   {dim:'length',f:0.0254},   'ft':    {dim:'length',f:0.3048},
+  'mi':   {dim:'length',f:1609.34},  'mm':    {dim:'length',f:0.001},
+  'cm':   {dim:'length',f:0.01},     'm':     {dim:'length',f:1},
+  'in2':  {dim:'area',f:6.4516e-4},  'ft2':   {dim:'area',f:0.092903},
+  'mi2':  {dim:'area',f:2.589988e6}, 'mm2':   {dim:'area',f:1e-6},
+  'cm2':  {dim:'area',f:1e-4},       'm2':    {dim:'area',f:1},
+  'in3':  {dim:'volume',f:1.6387e-5},'ft3':   {dim:'volume',f:0.0283168},
+  'gal':  {dim:'volume',f:0.00378541},'L':    {dim:'volume',f:0.001},
+  'cm3':  {dim:'volume',f:1e-6},     'm3':    {dim:'volume',f:1},
+  'F':    {dim:'temp',toK:function(v){return (v-32)*5/9+273.15;},fromK:function(v){return (v-273.15)*9/5+32;}},
+  'C':    {dim:'temp',toK:function(v){return v+273.15;},fromK:function(v){return v-273.15;}},
+  'K':    {dim:'temp',toK:function(v){return v;},fromK:function(v){return v;}},
+  'lb':   {dim:'mass',f:0.453592},   'oz':    {dim:'mass',f:0.0283495},
+  'ton':  {dim:'mass',f:907.185},    'g':     {dim:'mass',f:0.001},
+  'kg':   {dim:'mass',f:1},          'tonne': {dim:'mass',f:1000},
+  'mph':  {dim:'speed',f:0.44704},   'fps':   {dim:'speed',f:0.3048},
+  'kph':  {dim:'speed',f:0.277778},  'm/s':   {dim:'speed',f:1},
+  'knot': {dim:'speed',f:0.514444}
 };
 
-const $ = id => document.getElementById(id);
-const gcd = (a,b) => b ? gcd(b,a%b) : a;
+function el(id) { return document.getElementById(id); }
+
+function gcd(a, b) { return b ? gcd(b, a % b) : a; }
 
 // ── Undo ──────────────────────────────────────────────────────────────────
-function saveUndo() { lastStack = stack.map(i=>({...i})); }
+function saveUndo() {
+  lastStack = stack.map(function(i) { return {value:i.value, unit:i.unit}; });
+}
 function undo() {
-  if (!lastStack) { status('Nothing to undo',true); return; }
-  stack=lastStack; lastStack=null; input=''; decimalPlaces=null;
+  if (!lastStack) { status('Nothing to undo', true); return; }
+  stack = lastStack; lastStack = null; input = ''; decimalPlaces = null;
   status('Undone'); render();
 }
 
 // ── Format ────────────────────────────────────────────────────────────────
 function fmtDecimal(val) {
-  // Use a clean representation — cap at 10 digits to avoid float noise
-  // then strip trailing zeros
-  const places = decimalPlaces !== null ? decimalPlaces : 10;
-  const s = val.toFixed(places);
-  // Strip trailing zeros after decimal
-  return s.includes('.') ? s.replace(/\.?0+$/,'') : s;
+  var places = (decimalPlaces !== null) ? decimalPlaces : 10;
+  var s = val.toFixed(places);
+  // strip trailing zeros
+  if (s.indexOf('.') !== -1) {
+    s = s.replace(/0+$/, '').replace(/\.$/, '');
+  }
+  return s || '0';
 }
 
 function addCommas(s) {
-  return s.replace(/^(-?\d+)/, n => n.replace(/\B(?=(\d{3})+(?!\d))/g,','));
+  return s.replace(/^(-?\d+)/, function(n) {
+    return n.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  });
 }
 
 function fmtNum(val) {
-  if (!Number.isFinite(val)) return "ERR";
+  if (!isFinite(val)) return 'ERR';
   if (displayMode === 'decimal') return fmtDecimal(val);
-  const denom = parseInt($('precision').value)||16;
-  const rm = $('roundMode').value;
-  let n = val*denom;
-  n = rm==='nearest'?Math.round(n):rm==='up'?Math.ceil(n):Math.floor(n);
-  if (n===0) return '0';
-  const sign=n<0?'-':''; n=Math.abs(n);
-  const g=gcd(n,denom),nr=n/g,dr=denom/g;
-  const whole=Math.floor(nr/dr),rem=nr%dr;
-  if (rem===0) return sign+whole;
-  if (whole===0) return sign+rem+'/'+dr;
-  return sign+whole+' '+rem+'/'+dr;
+  var denom = parseInt(el('precision').value) || 16;
+  var rm = el('roundMode').value;
+  var n = val * denom;
+  n = rm === 'nearest' ? Math.round(n) : rm === 'up' ? Math.ceil(n) : Math.floor(n);
+  if (n === 0) return '0';
+  var sign = n < 0 ? '-' : '';
+  n = Math.abs(n);
+  var g = gcd(n, denom), nr = n / g, dr = denom / g;
+  var whole = Math.floor(nr / dr), rem = nr % dr;
+  if (rem === 0) return sign + whole;
+  if (whole === 0) return sign + rem + '/' + dr;
+  return sign + whole + ' ' + rem + '/' + dr;
 }
-function fmtVal({value,unit}) {
-  let s=fmtNum(value);
-  if (commaMode) s=addCommas(s);
-  return s+(unit?' '+unit:'');
+
+function fmtVal(item) {
+  var s = fmtNum(item.value);
+  if (commaMode) s = addCommas(s);
+  return s + (item.unit ? ' ' + item.unit : '');
 }
-function status(msg,isErr=false) {
-  const el=$('statusLine');
-  el.textContent=msg;
-  el.style.color=isErr?'#ff6e6e':'';
-  el.style.textShadow=isErr?'0 0 8px rgba(255,80,80,0.5)':'';
+
+function status(msg, isErr) {
+  var e = el('statusLine');
+  e.textContent = msg;
+  e.style.color = isErr ? '#ff6e6e' : '';
+  e.style.textShadow = isErr ? '0 0 8px rgba(255,80,80,0.5)' : '';
 }
 
 // ── Render ────────────────────────────────────────────────────────────────
 function render() {
-  const len=stack.length, rows=[];
-  for (let lvl=1;lvl<=5;lvl++) {
-    const idx=len-lvl;
-    rows.push({lvl, item:idx>=0?stack[idx]:null});
+  var len = stack.length;
+  var rows = [];
+  for (var lvl = 1; lvl <= 5; lvl++) {
+    var idx = len - lvl;
+    rows.push({ lvl: lvl, item: idx >= 0 ? stack[idx] : null });
   }
-  $('stackDisplay').innerHTML=rows.map(({lvl,item})=>
-    `<div class="stack-row${lvl===1?' level1':''}"><span class="lbl">X${lvl}</span><span>${item?fmtVal(item):''}</span></div>`
-  ).reverse().join('');
-  $('inputLine').innerHTML=(input?escHtml(input):')+'<span class="cursor">▎</span>';
-  $('shiftBtn').classList.toggle('active',shifted);
-  if (mode==='categories') status('Select category →');
-  else if (mode==='units') status(`Attach unit (${shifted?'SHIFT=convert':''}) → ${currentCat}`);
+  var html = '';
+  for (var i = rows.length - 1; i >= 0; i--) {
+    var r = rows[i];
+    var cls = r.lvl === 1 ? 'stack-row level1' : 'stack-row';
+    var val = r.item ? escHtml(fmtVal(r.item)) : '';
+    html += '<div class="' + cls + '"><span class="lbl">X' + r.lvl + '</span><span>' + val + '</span></div>';
+  }
+  el('stackDisplay').innerHTML = html;
+  el('inputLine').innerHTML = (input ? escHtml(input) : '') + '<span class="cursor">&#x258E;</span>';
+  el('shiftBtn').classList.toggle('active', shifted);
+  if (mode === 'categories') status('Select category \u2192');
+  else if (mode === 'units') status('Attach unit' + (shifted ? ' (SHIFT=convert)' : '') + ' \u2192 ' + currentCat);
 }
-function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 
 // ── Softkeys ──────────────────────────────────────────────────────────────
 function setSoftkeys(labels) {
-  ['skA','skB','skC','skD','skE','skF'].forEach((id,i)=>{
-    const btn=$(id),lbl=labels[i]||null;
-    btn.textContent=lbl||'—'; btn.disabled=!lbl;
-    btn.onclick=lbl?()=>softkey(i):null;
-  });
+  var ids = ['skA','skB','skC','skD','skE','skF'];
+  for (var i = 0; i < ids.length; i++) {
+    var btn = el(ids[i]);
+    var lbl = labels[i] || null;
+    btn.textContent = lbl || '\u2014';
+    btn.disabled = !lbl;
+    btn.onclick = lbl ? (function(idx){ return function(){ softkey(idx); }; })(i) : null;
+  }
 }
+
 function softkey(idx) {
-  if (mode==='categories'){currentCat=CATEGORIES[idx];mode='units';setSoftkeys(CAT_UNITS[currentCat]);render();return;}
-  if (mode==='units'){
-    const unit=CAT_UNITS[currentCat]?.[idx];
+  if (mode === 'categories') {
+    currentCat = CATEGORIES[idx];
+    mode = 'units';
+    setSoftkeys(CAT_LABELS[currentCat]);
+    render();
+    return;
+  }
+  if (mode === 'units') {
+    var unit = CAT_UNITS[currentCat] ? CAT_UNITS[currentCat][idx] : null;
     if (!unit) return;
     if (!commitInput()) return;
-    if (!stack.length){status('Stack empty',true);return;}
-    const x=stack[stack.length-1];
-    if (shifted){
-      const from=UNITS[x.unit],to=UNITS[unit];
-      if (!x.unit){status('No unit to convert',true);return;}
-      if (!from||!to){status('Unknown unit',true);return;}
-      if (from.dim!==to.dim){status('Incompatible dimensions',true);return;}
-      const base=from.toK?from.toK(x.value):x.value*from.f;
-      x.value=to.fromK?to.fromK(base):base/to.f; x.unit=unit;
-      status(`Converted → ${unit}`); shifted=false;
-    } else {x.unit=unit;status(`Attached ${unit}`);}
+    if (!stack.length) { status('Stack empty', true); return; }
+    var x = stack[stack.length - 1];
+    if (shifted) {
+      var from = UNITS[x.unit], to = UNITS[unit];
+      if (!x.unit)           { status('No unit to convert', true); return; }
+      if (!from || !to)      { status('Unknown unit', true); return; }
+      if (from.dim !== to.dim){ status('Incompatible dimensions', true); return; }
+      var base = from.toK ? from.toK(x.value) : x.value * from.f;
+      x.value = to.fromK ? to.fromK(base) : base / to.f;
+      x.unit = unit;
+      status('Converted \u2192 ' + unit);
+      shifted = false;
+    } else {
+      x.unit = unit;
+      status('Attached ' + unit);
+    }
     render();
   }
 }
 
 // ── Input ─────────────────────────────────────────────────────────────────
 function digit(c) {
-  if (mode!=='normal') return;
-  if (c==='/'&&input.includes('/')) return;
-  if (c==='.'&&input.split('/').pop().includes('.')) return;
-  if (c===' '&&input.endsWith(' ')) return;
-  input+=c; render();
+  if (mode !== 'normal') return;
+  if (c === '/' && input.indexOf('/') !== -1) return;
+  if (c === '.' && input.split('/').pop().indexOf('.') !== -1) return;
+  if (c === ' ' && input.slice(-1) === ' ') return;
+  input += c;
+  render();
 }
-function back(){input=input.trimEnd().slice(0,-1);render();}
 
-function parseToken(s){
-  if (s.includes('/')){const[n,d]=s.split('/').map(Number);return d?n/d:NaN;}
-  return Number(s);
+function back() {
+  input = input.replace(/\s$/, '').slice(0, -1);
+  render();
 }
-function parseInput(s){
-  s=s.trim();if(!s)return[];
-  const parts=s.split(/\s+/);
-  if (parts.length===2&&parts[1].includes('/')){
-    const w=Number(parts[0]),f=parseToken(parts[1]);
-    if (!isFinite(w)||!isFinite(f))return null;
-    return [{value:w+(w<0?-f:f),unit:null}];
+
+function parseToken(s) {
+  if (s.indexOf('/') !== -1) {
+    var parts = s.split('/');
+    var n = parseFloat(parts[0]), d = parseFloat(parts[1]);
+    return d ? n / d : NaN;
   }
-  const res=[];
-  for (const p of parts){const v=parseToken(p);if(!isFinite(v))return null;res.push({value:v,unit:null});}
+  return parseFloat(s);
+}
+
+function parseInput(s) {
+  s = s.trim();
+  if (!s) return [];
+  var parts = s.split(/\s+/);
+  if (parts.length === 2 && parts[1].indexOf('/') !== -1) {
+    var w = parseFloat(parts[0]), f = parseToken(parts[1]);
+    if (!isFinite(w) || !isFinite(f)) return null;
+    return [{ value: w + (w < 0 ? -f : f), unit: null }];
+  }
+  var res = [];
+  for (var i = 0; i < parts.length; i++) {
+    var v = parseToken(parts[i]);
+    if (!isFinite(v)) return null;
+    res.push({ value: v, unit: null });
+  }
   return res;
 }
-function commitInput(){
-  if (!input.trim())return true;
-  const vals=parseInput(input);
-  if (!vals){status('Invalid input',true);return false;}
-  stack.push(...vals);input='';decimalPlaces=null;return true;
+
+function commitInput() {
+  if (!input.trim()) return true;
+  var vals = parseInput(input);
+  if (!vals) { status('Invalid input', true); return false; }
+  for (var i = 0; i < vals.length; i++) stack.push(vals[i]);
+  input = '';
+  decimalPlaces = null;
+  return true;
 }
 
 // ── Stack Ops ─────────────────────────────────────────────────────────────
-function handleEnter(){
-  if (mode!=='normal')return;
+function handleEnter() {
+  if (mode !== 'normal') return;
   saveUndo();
-  if (input.trim()){if(!commitInput())return;}
-  else if (stack.length)stack.push({...stack[stack.length-1]});
+  if (input.trim()) {
+    if (!commitInput()) return;
+  } else if (stack.length) {
+    var top = stack[stack.length - 1];
+    stack.push({ value: top.value, unit: top.unit });
+  }
   render();
 }
-function drop(){saveUndo();if(input.trim())input='';else if(stack.length)stack.pop();decimalPlaces=null;render();}
-function swap(){
-  if(mode!=='normal')return;if(!commitInput())return;
-  if(stack.length<2){status('Need ≥ 2 values',true);return;}
-  saveUndo();decimalPlaces=null;
-  const n=stack.length;[stack[n-1],stack[n-2]]=[stack[n-2],stack[n-1]];render();
+
+function drop() {
+  saveUndo();
+  if (input.trim()) { input = ''; } else if (stack.length) { stack.pop(); }
+  decimalPlaces = null;
+  render();
 }
-function rollDown(){
-  if(mode!=='normal')return;if(!commitInput())return;
-  if(stack.length<2)return;
-  saveUndo();decimalPlaces=null;stack.unshift(stack.pop());render();
+
+function swap() {
+  if (mode !== 'normal') return;
+  if (!commitInput()) return;
+  if (stack.length < 2) { status('Need \u2265 2 values', true); return; }
+  saveUndo();
+  decimalPlaces = null;
+  var n = stack.length;
+  var tmp = stack[n-1]; stack[n-1] = stack[n-2]; stack[n-2] = tmp;
+  render();
 }
-function clearAll(){
-  saveUndo();stack=[];input='';mode='normal';shifted=false;currentCat=null;decimalPlaces=null;
-  setSoftkeys([]);status('');render();
+
+function rollDown() {
+  if (mode !== 'normal') return;
+  if (!commitInput()) return;
+  if (stack.length < 2) return;
+  saveUndo();
+  decimalPlaces = null;
+  stack.unshift(stack.pop());
+  render();
+}
+
+function clearAll() {
+  saveUndo();
+  stack = []; input = ''; mode = 'normal'; shifted = false;
+  currentCat = null; decimalPlaces = null;
+  setSoftkeys([]);
+  status('');
+  render();
 }
 
 // ── Arithmetic ────────────────────────────────────────────────────────────
-function operate(op){
-  if(mode!=='normal')return;if(!commitInput())return;
-  if(stack.length<2){status('Need ≥ 2 values',true);return;}
-  const x1=stack[stack.length-1],x2=stack[stack.length-2];
-  if(op==='÷'&&x1.value===0){status('Division by zero',true);return;}
-  saveUndo();decimalPlaces=null;
-  let r={value:0,unit:null};
-  if(op==='+'||op==='−'){
-    if(x2.unit&&x1.unit){const u1=UNITS[x2.unit],u2=UNITS[x1.unit];if(!u1||!u2||u1.dim!==u2.dim){status('Incompatible units',true);return;}}
-    const tb=u=>UNITS[u]?.f??1;
-    const av=x2.unit?x2.value*tb(x2.unit):x2.value;
-    const bv=x1.unit?x1.value*tb(x1.unit):x1.value;
-    const rv=op==='+'?av+bv:av-bv;
-    const ru=x2.unit||x1.unit;
-    r.value=ru?rv/tb(ru):rv;r.unit=ru;
-  } else if(op==='×'){r.value=x2.value*x1.value;}
-  else if(op==='÷'){r.value=x2.value/x1.value;}
-  stack.splice(stack.length-2,2,r);render();
+function operate(op) {
+  if (mode !== 'normal') return;
+  if (!commitInput()) return;
+  if (stack.length < 2) { status('Need \u2265 2 values', true); return; }
+  var x1 = stack[stack.length - 1];
+  var x2 = stack[stack.length - 2];
+  if (op === 'div' && x1.value === 0) { status('Division by zero', true); return; }
+  saveUndo();
+  decimalPlaces = null;
+  var r = { value: 0, unit: null };
+  if (op === 'plus' || op === 'minus') {
+    if (x2.unit && x1.unit) {
+      var u1 = UNITS[x2.unit], u2 = UNITS[x1.unit];
+      if (!u1 || !u2 || u1.dim !== u2.dim) { status('Incompatible units', true); return; }
+    }
+    var tb = function(u) { return UNITS[u] ? UNITS[u].f : 1; };
+    var av = x2.unit ? x2.value * tb(x2.unit) : x2.value;
+    var bv = x1.unit ? x1.value * tb(x1.unit) : x1.value;
+    var rv = op === 'plus' ? av + bv : av - bv;
+    var ru = x2.unit || x1.unit;
+    r.value = ru ? rv / tb(ru) : rv;
+    r.unit = ru;
+  } else if (op === 'times') {
+    r.value = x2.value * x1.value;
+  } else if (op === 'div') {
+    r.value = x2.value / x1.value;
+  }
+  stack.splice(stack.length - 2, 2, r);
+  render();
 }
 
 // ── Trim Decimal ──────────────────────────────────────────────────────────
-function trimDecimal(){
-  if (displayMode!=='decimal'){status('Switch to decimal mode first',true);return;}
-  if (!stack.length){status('Stack empty',true);return;}
-  // On first press, figure out how many decimals are currently visible
-  if (decimalPlaces===null){
-    const s=fmtDecimal(stack[stack.length-1].value);
-    const dot=s.indexOf('.');
-    decimalPlaces=dot===-1?0:s.length-dot-1;
+function trimDecimal() {
+  if (displayMode !== 'decimal') { status('Switch to decimal mode first', true); return; }
+  if (!stack.length) { status('Stack empty', true); return; }
+  var x = stack[stack.length - 1];
+  if (decimalPlaces === null) {
+    var s = fmtDecimal(x.value);
+    var dot = s.indexOf('.');
+    decimalPlaces = dot === -1 ? 0 : s.length - dot - 1;
   }
-  if (decimalPlaces===0){status('Already a whole number',true);return;}
+  if (decimalPlaces === 0) { status('Already a whole number', true); return; }
   saveUndo();
   decimalPlaces--;
-  // Round the stored value to match so math stays consistent
-  const x=stack[stack.length-1];
-  const factor=Math.pow(10,decimalPlaces);
-  x.value=Math.round(x.value*factor)/factor;
-  status(`Trimmed to ${decimalPlaces} decimal${decimalPlaces!==1?'s':''}`);
+  var factor = Math.pow(10, decimalPlaces);
+  x.value = Math.round(x.value * factor) / factor;
+  status('Trimmed to ' + decimalPlaces + ' decimal' + (decimalPlaces !== 1 ? 's' : ''));
   render();
 }
 
 // ── Paste Modal ───────────────────────────────────────────────────────────
-function openPasteModal(){$('pasteInput').value='';$('pasteModal').classList.add('show');setTimeout(()=>$('pasteInput').focus(),100);}
-function closePasteModal(){$('pasteModal').classList.remove('show');}
-function confirmPaste(){
-  const text=$('pasteInput').value.trim();
-  closePasteModal();
-  if (!text){status('Nothing to paste',true);return;}
-  const vals=parseInput(text.replace(/,/g,''));
-  if (!vals||vals.length===0){status('Invalid paste value',true);return;}
-  saveUndo();stack.push(...vals);decimalPlaces=null;
-  status(`Pasted: ${text}`);render();
+function openPasteModal() {
+  el('pasteInput').value = '';
+  el('pasteModal').classList.add('show');
+  setTimeout(function() { el('pasteInput').focus(); }, 100);
 }
-$('pasteModal').addEventListener('click',e=>{if(e.target===$('pasteModal'))closePasteModal();});
-$('pasteInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmPaste();});
+function closePasteModal() { el('pasteModal').classList.remove('show'); }
+function confirmPaste() {
+  var text = el('pasteInput').value.trim();
+  closePasteModal();
+  if (!text) { status('Nothing to paste', true); return; }
+  var vals = parseInput(text.replace(/,/g, ''));
+  if (!vals || vals.length === 0) { status('Invalid paste value', true); return; }
+  saveUndo();
+  for (var i = 0; i < vals.length; i++) stack.push(vals[i]);
+  decimalPlaces = null;
+  status('Pasted: ' + text);
+  render();
+}
+el('pasteModal').addEventListener('click', function(e) {
+  if (e.target === el('pasteModal')) closePasteModal();
+});
+el('pasteInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') confirmPaste();
+});
 
 // ── Mode Toggles ──────────────────────────────────────────────────────────
-function toggleDisplayMode(){displayMode=displayMode==='fraction'?'decimal':'fraction';decimalPlaces=null;status(`Display: ${displayMode}`);render();}
-function toggleCommas(){commaMode=!commaMode;$('commaBtn').style.boxShadow=commaMode?'0 0 12px #4da3ff88':'';status(`Commas: ${commaMode?'on':'off'}`);render();}
-function toggleShift(){shifted=!shifted;render();}
-function toggleUnitsMode(){
-  if(mode==='normal'){mode='categories';setSoftkeys(CATEGORIES);}
-  else{mode='normal';shifted=false;setSoftkeys([]);status('');}
+function toggleDisplayMode() {
+  displayMode = displayMode === 'fraction' ? 'decimal' : 'fraction';
+  decimalPlaces = null;
+  status('Display: ' + displayMode);
+  render();
+}
+function toggleCommas() {
+  commaMode = !commaMode;
+  el('commaBtn').style.boxShadow = commaMode ? '0 0 12px #4da3ff88' : '';
+  status('Commas: ' + (commaMode ? 'on' : 'off'));
+  render();
+}
+function toggleShift() { shifted = !shifted; render(); }
+function toggleUnitsMode() {
+  if (mode === 'normal') { mode = 'categories'; setSoftkeys(CATEGORIES); }
+  else { mode = 'normal'; shifted = false; setSoftkeys([]); status(''); }
   render();
 }
 
 // ── Keyboard ──────────────────────────────────────────────────────────────
-document.addEventListener('keydown',e=>{
-  if(e.ctrlKey||e.metaKey||e.altKey)return;
-  if($('pasteModal').classList.contains('show'))return;
-  switch(e.key){
-    case '0':case '1':case '2':case '3':case '4':
-    case '5':case '6':case '7':case '8':case '9':digit(e.key);break;
-    case '.':digit('.');break;
-    case '/':e.preventDefault();digit('/');break;
-    case ' ':e.preventDefault();digit(' ');break;
-    case 'Enter':handleEnter();break;
-    case 'Backspace':back();break;
-    case 'Escape':clearAll();break;
-    case '+':operate('+');break;
-    case '-':operate('−');break;
-    case '*':operate('×');break;
-    case 's':case 'S':swap();break;
-    case 'r':case 'R':rollDown();break;
-    case 'd':case 'D':drop();break;
-    case 'f':case 'F':toggleDisplayMode();break;
-    case 'c':case 'C':toggleCommas();break;
-    case 'u':case 'U':undo();break;
-    case 'p':case 'P':openPasteModal();break;
-    case 't':case 'T':trimDecimal();break;
-    case 'Shift':break;
+document.addEventListener('keydown', function(e) {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (el('pasteModal').classList.contains('show')) return;
+  switch (e.key) {
+    case '0': case '1': case '2': case '3': case '4':
+    case '5': case '6': case '7': case '8': case '9': digit(e.key); break;
+    case '.': digit('.'); break;
+    case '/': e.preventDefault(); digit('/'); break;
+    case ' ': e.preventDefault(); digit(' '); break;
+    case 'Enter': handleEnter(); break;
+    case 'Backspace': back(); break;
+    case 'Escape': clearAll(); break;
+    case '+': operate('plus'); break;
+    case '-': operate('minus'); break;
+    case '*': operate('times'); break;
+    case 's': case 'S': swap(); break;
+    case 'r': case 'R': rollDown(); break;
+    case 'd': case 'D': drop(); break;
+    case 'f': case 'F': toggleDisplayMode(); break;
+    case 'c': case 'C': toggleCommas(); break;
+    case 'u': case 'U': undo(); break;
+    case 'p': case 'P': openPasteModal(); break;
+    case 't': case 'T': trimDecimal(); break;
   }
 });
 
 // ── PWA ───────────────────────────────────────────────────────────────────
-const manifest={name:"RPN Fraction Calculator",short_name:"RPN Calc",start_url:".",display:"standalone",background_color:"#d7d7d7",theme_color:"#2c3040",orientation:"portrait",icons:[{src:makeIcon(192),sizes:"192x192",type:"image/png"},{src:makeIcon(512),sizes:"512x512",type:"image/png"}]};
-function makeIcon(size){
-  const c=document.createElement('canvas');c.width=c.height=size;
-  const ctx=c.getContext('2d');
-  ctx.fillStyle='#2d3138';ctx.beginPath();ctx.roundRect(0,0,size,size,size*0.18);ctx.fill();
-  ctx.fillStyle='#1e2126';ctx.beginPath();ctx.roundRect(size*0.08,size*0.08,size*0.84,size*0.35,size*0.06);ctx.fill();
-  ctx.fillStyle='#4da3ff';ctx.font=`bold ${size*0.22}px monospace`;ctx.textAlign='center';ctx.fillText('RPN',size/2,size*0.32);
-  const ks=size*0.13,gap=size*0.04,ox=(size-(3*ks+2*gap))/2,oy=size*0.52;
-  [['÷',2,0],['×',2,1],['−',2,2],['7',0,0],['8',1,0],['4',0,1],['5',1,1],['1',0,2],['2',1,2]].forEach(([l,col,row])=>{
-    const x=ox+col*(ks+gap),y=oy+row*(ks+gap);
-    ctx.fillStyle=l.match(/[÷×−+]/)?'#2d7cff':'#8e9399';
-    ctx.beginPath();ctx.roundRect(x,y,ks,ks,ks*0.2);ctx.fill();
-    ctx.fillStyle='white';ctx.font=`bold ${ks*0.5}px sans-serif`;ctx.fillText(l,x+ks/2,y+ks*0.68);
-  });
+function makeIcon(size) {
+  var c = document.createElement('canvas');
+  c.width = c.height = size;
+  var ctx = c.getContext('2d');
+  ctx.fillStyle = '#2d3138';
+  ctx.beginPath(); ctx.roundRect(0,0,size,size,size*0.18); ctx.fill();
+  ctx.fillStyle = '#1e2126';
+  ctx.beginPath(); ctx.roundRect(size*0.08,size*0.08,size*0.84,size*0.35,size*0.06); ctx.fill();
+  ctx.fillStyle = '#4da3ff';
+  ctx.font = 'bold ' + Math.round(size*0.22) + 'px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('RPN', size/2, size*0.32);
+  var ks=size*0.13, gap=size*0.04, ox=(size-(3*ks+2*gap))/2, oy=size*0.52;
+  var keys=[['/',2,0],['x',2,1],['-',2,2],['7',0,0],['8',1,0],['4',0,1],['5',1,1],['1',0,2],['2',1,2]];
+  for (var i=0;i<keys.length;i++) {
+    var l=keys[i][0], col=keys[i][1], row=keys[i][2];
+    var kx=ox+col*(ks+gap), ky=oy+row*(ks+gap);
+    ctx.fillStyle = '/-x'.indexOf(l)!==-1 ? '#2d7cff' : '#8e9399';
+    ctx.beginPath(); ctx.roundRect(kx,ky,ks,ks,ks*0.2); ctx.fill();
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold ' + Math.round(ks*0.5) + 'px sans-serif';
+    ctx.fillText(l, kx+ks/2, ky+ks*0.68);
+  }
   return c.toDataURL('image/png');
 }
-const mBlob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
-const mLink=document.createElement('link');mLink.rel='manifest';mLink.href=URL.createObjectURL(mBlob);
+
+var manifest = {
+  name: "RPN Fraction Calculator", short_name: "RPN Calc",
+  start_url: ".", display: "standalone",
+  background_color: "#d7d7d7", theme_color: "#2c3040", orientation: "portrait",
+  icons: [
+    {src: makeIcon(192), sizes: "192x192", type: "image/png"},
+    {src: makeIcon(512), sizes: "512x512", type: "image/png"}
+  ]
+};
+var mBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+var mLink = document.createElement('link');
+mLink.rel = 'manifest'; mLink.href = URL.createObjectURL(mBlob);
 document.head.appendChild(mLink);
-const swCode=`const CACHE='rpn-v5';
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['.'])));self.skipWaiting();});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
-self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});`;
-if('serviceWorker'in navigator)navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode],{type:'application/javascript'})),{scope:'./'});
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('installBanner').classList.add('show');});
-window.addEventListener('appinstalled',()=>{$('installBanner').classList.remove('show');deferredPrompt=null;});
-function installApp(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;$('installBanner').classList.remove('show');});}
-function dismissInstall(){$('installBanner').classList.remove('show');}
+
+var swCode = "const CACHE='rpn-v6';" +
+  "self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['.'])));self.skipWaiting();});" +
+  "self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});" +
+  "self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});";
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register(
+    URL.createObjectURL(new Blob([swCode], {type:'application/javascript'})),
+    {scope: './'}
+  );
+}
+
+var deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault(); deferredPrompt = e; el('installBanner').classList.add('show');
+});
+window.addEventListener('appinstalled', function() {
+  el('installBanner').classList.remove('show'); deferredPrompt = null;
+});
+function installApp() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function() { deferredPrompt = null; el('installBanner').classList.remove('show'); });
+}
+function dismissInstall() { el('installBanner').classList.remove('show'); }
 
 render();
 </script>
