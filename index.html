@@ -503,17 +503,15 @@ function operate(op) {
 function trimDecimal() {
   if (displayMode !== 'decimal') { status('Switch to decimal mode first', true); return; }
   if (!stack.length) { status('Stack empty', true); return; }
-  var x = stack[stack.length - 1];
+  // On first press, initialize from what is currently visible on X1
   if (decimalPlaces === null) {
-    var s = fmtDecimal(x.value);
+    var s = fmtDecimal(stack[stack.length - 1].value);
     var dot = s.indexOf('.');
     decimalPlaces = dot === -1 ? 0 : s.length - dot - 1;
   }
   if (decimalPlaces === 0) { status('Already a whole number', true); return; }
-  saveUndo();
   decimalPlaces--;
-  var factor = Math.pow(10, decimalPlaces);
-  x.value = Math.round(x.value * factor) / factor;
+  // Do NOT round and store back — just change the display precision
   status('Trimmed to ' + decimalPlaces + ' decimal' + (decimalPlaces !== 1 ? 's' : ''));
   render();
 }
