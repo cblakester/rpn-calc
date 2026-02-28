@@ -334,7 +334,7 @@
 // ── State ─────────────────────────────────────────────────────────────────
 let stack = [], lastStack = null, input = "",
     mode = 'normal', shifted = false, currentCat = null,
-    displayMode = 'fraction', commaMode = false;
+    displayMode = 'fraction', commaMode = false, trimDecimals = null;
 
 // ── Unit Data ─────────────────────────────────────────────────────────────
 const CATEGORIES = ['Length','Area','Volume','Temp','Weight','Speed'];
@@ -383,7 +383,10 @@ function addCommas(s) {
 }
 function fmtNum(val) {
   if (!Number.isFinite(val)) return "ERR";
-  if (displayMode === 'decimal') return val.toFixed(8).replace(/\.?0+$/,'') || '0';
+  if (displayMode === 'decimal') {
+    const decimals = trimDecimals !== null ? trimDecimals : 20;
+    return val.toFixed(decimals).replace(/\.?0+$/,'') || '0';
+  }
   const denom = parseInt($('precision').value) || 16;
   const rm = $('roundMode').value;
   let n = val * denom;
@@ -521,7 +524,7 @@ function rollDown() {
 }
 function clearAll() {
   saveUndo();
-  stack=[];input='';mode='normal';shifted=false;currentCat=null;
+  stack=[];input='';mode='normal';shifted=false;currentCat=null;trimDecimals=null;
   setSoftkeys([]); status(''); render();
 }
 
@@ -551,16 +554,18 @@ function trimDecimal() {
   if (displayMode !== 'decimal') { status('Switch to decimal mode first', true); return; }
   if (!stack.length) { status('Stack empty', true); return; }
   const x = stack[stack.length-1];
-  // Work from the displayed string, not the raw float
-  const displayed = fmtNum(x.value);
-  const dot = displayed.indexOf('.');
-  const currentDecimals = dot === -1 ? 0 : displayed.length - dot - 1;
-  if (currentDecimals === 0) { status('Already a whole number', true); return; }
+  // On first press, detect current decimal places from displayed value
+  if (trimDecimals === null) {
+    const s = (x.value).toPrecision(15).replace(/\.?0+$/, '');
+    const dot = s.indexOf('.');
+    trimDecimals = dot === -1 ? 0 : s.length - dot - 1;
+  }
+  if (trimDecimals === 0) { status('Already a whole number', true); return; }
   saveUndo();
-  const newDecimals = currentDecimals - 1;
-  const factor = Math.pow(10, newDecimals);
+  trimDecimals = trimDecimals - 1;
+  const factor = Math.pow(10, trimDecimals);
   x.value = Math.round(x.value * factor) / factor;
-  status(`Trimmed to ${newDecimals} decimal${newDecimals !== 1 ? 's' : ''}`);
+  status(`Trimmed to ${trimDecimals} decimal${trimDecimals !== 1 ? 's' : ''}`);
   render();
 }
 
@@ -586,7 +591,7 @@ $('pasteModal').addEventListener('click', e=>{ if(e.target===$('pasteModal')) cl
 $('pasteInput').addEventListener('keydown', e=>{ if(e.key==='Enter') confirmPaste(); });
 
 // ── Mode Toggles ──────────────────────────────────────────────────────────
-function toggleDisplayMode() { displayMode=displayMode==='fraction'?'decimal':'fraction'; status(`Display: ${displayMode}`); render(); }
+function toggleDisplayMode() { displayMode=displayMode==='fraction'?'decimal':'fraction'; trimDecimals=null; status(`Display: ${displayMode}`); render(); }
 function toggleCommas() { commaMode=!commaMode; $('commaBtn').style.boxShadow=commaMode?'0 0 12px #4da3ff88':''; status(`Commas: ${commaMode?'on':'off'}`); render(); }
 function toggleShift() { shifted=!shifted; render(); }
 function toggleUnitsMode() {
