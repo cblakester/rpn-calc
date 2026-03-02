@@ -111,8 +111,10 @@
   </div>
 
   <div class="controls">
-    <select id="precision" onchange="loadSettings();
-render(); saveSettings();">
+    <select id="precision" onchange="window.addEventListener('DOMContentLoaded', function() {
+  loadSettings();
+  render();
+}); saveSettings();">
       <option value="8">1/8</option>
       <option value="16" selected>1/16</option>
       <option value="32">1/32</option>
@@ -316,6 +318,7 @@ function render() {
   el('shiftBtn').classList.toggle('active', shifted);
   if (mode === 'categories') status('Select category \u2192');
   else if (mode === 'units') status('Attach unit' + (shifted ? ' (SHIFT=convert)' : '') + ' \u2192 ' + currentCat);
+  saveSettings();
 }
 
 function escHtml(s) {
@@ -648,7 +651,8 @@ function saveSettings() {
     localStorage.setItem('rpn_roundMode', el('roundMode').value);
     localStorage.setItem('rpn_displayMode', displayMode);
     localStorage.setItem('rpn_commaMode', commaMode ? '1' : '0');
-  } catch(e) {}
+    localStorage.setItem('rpn_stack', JSON.stringify(stack));
+  } catch(e) { console.log('Save failed:', e); }
 }
 function loadSettings() {
   try {
@@ -656,14 +660,19 @@ function loadSettings() {
     var r = localStorage.getItem('rpn_roundMode');
     var d = localStorage.getItem('rpn_displayMode');
     var c = localStorage.getItem('rpn_commaMode');
+    var s = localStorage.getItem('rpn_stack');
     if (p) el('precision').value = p;
     if (r) el('roundMode').value = r;
     if (d) displayMode = d;
-    if (c) {
+    if (c !== null) {
       commaMode = c === '1';
       if (commaMode) el('commaBtn').style.boxShadow = '0 0 12px #4da3ff88';
     }
-  } catch(e) {}
+    if (s) {
+      var parsed = JSON.parse(s);
+      if (Array.isArray(parsed)) stack = parsed;
+    }
+  } catch(e) { console.log('Load failed:', e); }
 }
 // Fires on touchstart for instant response, falls back to click on desktop
 document.querySelectorAll('.key').forEach(function(btn) {
