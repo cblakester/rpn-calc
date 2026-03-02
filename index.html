@@ -111,13 +111,14 @@
   </div>
 
   <div class="controls">
-    <select id="precision" onchange="render()">
+    <select id="precision" onchange="loadSettings();
+render(); saveSettings();">
       <option value="8">1/8</option>
       <option value="16" selected>1/16</option>
       <option value="32">1/32</option>
       <option value="64">1/64</option>
     </select>
-    <select id="roundMode" onchange="render()">
+    <select id="roundMode" onchange="render(); saveSettings();">
       <option value="nearest">Nearest</option>
       <option value="up">Up</option>
       <option value="down">Down</option>
@@ -546,15 +547,13 @@ el('pasteInput').addEventListener('keydown', function(e) {
 // ── Mode Toggles ──────────────────────────────────────────────────────────
 function toggleDisplayMode() {
   displayMode = displayMode === 'fraction' ? 'decimal' : 'fraction';
-  decimalPlaces = null;
-  status('Display: ' + displayMode);
-  render();
+  decimalPlaces = null; saveSettings();
+  status('Display: ' + displayMode); render();
 }
 function toggleCommas() {
   commaMode = !commaMode;
   el('commaBtn').style.boxShadow = commaMode ? '0 0 12px #4da3ff88' : '';
-  status('Commas: ' + (commaMode ? 'on' : 'off'));
-  render();
+  saveSettings(); status('Commas: ' + (commaMode ? 'on' : 'off')); render();
 }
 function toggleShift() { shifted = !shifted; render(); }
 function toggleUnitsMode() {
@@ -642,7 +641,30 @@ if ('serviceWorker' in navigator) {
   );
 }
 
-// ── Fast Touch ────────────────────────────────────────────────────────────
+// ── Persist Settings ──────────────────────────────────────────────────────
+function saveSettings() {
+  try {
+    localStorage.setItem('rpn_precision', el('precision').value);
+    localStorage.setItem('rpn_roundMode', el('roundMode').value);
+    localStorage.setItem('rpn_displayMode', displayMode);
+    localStorage.setItem('rpn_commaMode', commaMode ? '1' : '0');
+  } catch(e) {}
+}
+function loadSettings() {
+  try {
+    var p = localStorage.getItem('rpn_precision');
+    var r = localStorage.getItem('rpn_roundMode');
+    var d = localStorage.getItem('rpn_displayMode');
+    var c = localStorage.getItem('rpn_commaMode');
+    if (p) el('precision').value = p;
+    if (r) el('roundMode').value = r;
+    if (d) displayMode = d;
+    if (c) {
+      commaMode = c === '1';
+      if (commaMode) el('commaBtn').style.boxShadow = '0 0 12px #4da3ff88';
+    }
+  } catch(e) {}
+}
 // Fires on touchstart for instant response, falls back to click on desktop
 document.querySelectorAll('.key').forEach(function(btn) {
   btn.addEventListener('touchstart', function(e) {
