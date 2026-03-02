@@ -55,8 +55,9 @@
   .key {
     padding: 16px 4px; font-size: 16px; font-weight: 700; border-radius: 10px; border: none;
     background: linear-gradient(var(--chrome1), var(--chrome3)); box-shadow: 0 4px 8px rgba(0,0,0,0.22);
-    cursor: pointer; touch-action: manipulation; transition: transform 0.08s; position: relative;
+    cursor: pointer; touch-action: manipulation; position: relative;
     -webkit-tap-highlight-color: transparent;
+    user-select: none; -webkit-user-select: none;
   }
   .key:active { transform: scale(0.94); }
   .key.op     { background: linear-gradient(#5cb0ff, #2d7cff); color: white; }
@@ -641,7 +642,14 @@ if ('serviceWorker' in navigator) {
   );
 }
 
-var deferredPrompt = null;
+// ── Fast Touch ────────────────────────────────────────────────────────────
+// Fires on touchstart for instant response, falls back to click on desktop
+document.querySelectorAll('.key').forEach(function(btn) {
+  btn.addEventListener('touchstart', function(e) {
+    e.preventDefault(); // prevents the 300ms click delay
+    btn.click();
+  }, { passive: false });
+});
 window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault(); deferredPrompt = e; el('installBanner').classList.add('show');
 });
